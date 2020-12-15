@@ -38,17 +38,16 @@
         <view class="goods-tab-nav {{curIndex === 1 ?'on':''}}" bindtap="bindTap" data-index="1">评论</view>
     </view>
 
-    <!-- 评论 -->
-    <view class="goods-content">
+    <!-- 关闭评论 -->
+    <!-- <view class="goods-content">
         <view wx:if="{{curIndex === 1}}" class="WxComment">
               <WxComment tipOne="powered by Voyz_Shen" tipTwo="" submitBtnText="评论" articleID="{{articleID}}" contentLen='1'></WxComment>
-        </view>
+        </view> 
 
-        <!-- <view wx:if="{{curIndex === 1}}">{{fruitDetail.service}}</view> -->
         <view wx:if="{{curIndex === 0}}" class='theDetail'>
           {{fruitDetail.detail}}
         </view>
-    </view> 
+    </view>  -->
   </view>
 
   
