@@ -6,17 +6,17 @@ App({
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
     } else {
       wx.cloud.init({
-        env: 'voyz-cloud-86f82a',
+        env: 'pig-1-2gykytc24ac43904',
         traceUser: true,
       })
     }
 
     this.globalData = {
-      cloudRoot : "clo140d-voyz-cloud-86f82a/",
+      cloudRoot : "7069-pig-1-2gykytc24ac43904-1304113058/",
       carts:[],  //购物车
       tmpNum: 0,
       tempFilePaths: "",
-      admin:["Mr.Voyz"],
+      admin:["周世聪"],
       openId: null,
       appid: 'wx0dd8c5c9ebe90a78',
       mch_id: '1519277861',

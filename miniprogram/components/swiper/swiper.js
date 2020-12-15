@@ -12,8 +12,8 @@ Component({
    */
   data: {
     imgUrls: [
-      'cloud://pig-1-2gykytc24ac43904/fruitSwiper/swiper1.png',
-      'cloud://pig-1-2gykytc24ac43904/fruitSwiper/swiper2.png'
+      'cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/fruitSwiper/Snipaste_2020-08-21_10-42-52.png',
+      'cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/fruitSwiper/mmexport1593997979333.jpg'
       ]
   },
 
