@@ -8,10 +8,10 @@ Page({
     address: {},
     isAdmin: -1,
     openid: '',
+    // 管理员openID
     adiminArr: [
-      '',
-      'oA9Ke4tObqwxqNSfALdVZPkVv7Yc',
-      'oA9Ke4rH2nnqFgFbWIhyQu5bCXPA'
+      'ofDnu4s_Aio-eWGe7tYBKhPUhhec',
+      ''
     ]
   },
   onLoad() {

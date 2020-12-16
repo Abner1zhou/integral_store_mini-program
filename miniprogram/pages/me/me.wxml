@@ -24,7 +24,7 @@
         <view wx:if="{{hasAddress}}" class="address-list">
             <view>姓名：{{address.name}}</view>
             <view>电话：{{address.phone}}</view>
-            <view>宿舍楼：{{address.detail}}</view>
+            <view>部门：{{address.group}}</view>
         </view>
     </view>
 

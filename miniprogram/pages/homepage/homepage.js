@@ -12,7 +12,7 @@ Page({
       { id: 0, name: "美味鲜果" },
       { id: 1, name: "今日特惠" },
       { id: 2, name: "新鲜上架" },
-      { id: 3, name: "店主推荐" },
+      { id: 3, name: "小易推荐" },
     ],
     activeTypeId: 0,
     isShow:true, 
@@ -124,6 +124,10 @@ Page({
     })
     // 获取openId
     this.getOpenid();
+    wx.setStorage({
+      data: this.openid,
+      key: 'openid',
+    })
   },
 
   onReady: function () {

@@ -1,141 +1,98 @@
+const app = getApp();
+const db = wx.cloud.database();
+
 Page({
   data: {
-    address: {
     name: '',
     phone: '',
-    // detail: ''
-    detail: 0,
-    message: "",
-    schoolName:0,  //学校
-    addressItem:0, //地址类型
-    apartmentNum:0,   //宿舍楼号
-    },
-
-    school: 0,
-    school_Arr: [
-      "交大",
-      "华师大"
-    ],
-
-    // address: 0,
-    address_Arr:[
-      "宿舍楼","学院","图书馆","餐厅","教学楼","其他"
-    ],
-
-    // apartment:0,
-    // apartment_Arr:[0,1,2,3]
-
+    group: '',
+    balance: 0,
+    openid: ''
   },
+
 
   onLoad() {
     var self = this;
     wx.getStorage({
-      key: 'address',
-      success: function (res) {
+      key: 'openid',
+      success: (res) => {
         self.setData({
-          address: res.data
+          openid: this.openid
         })
       }
     })
-
-  },
-
-  // // 姓名
-  // getName:function(e){
-  //   var that = this
-  //   that.setData({
-  //     name:e.detail.value
-  //   })
-  // },
-
-  // // 手机
-  // getPhone: function (e) {
-  //   var that = this
-  //   that.setData({
-  //     phone: e.detail.value
-  //   })
-  // },
-
-  // 学校
-  getSchool:function(e){
-    var that = this
-    // that.data.address['schoolName'] = parseInt(e.detail.value)
-    // console.log(getCurrentPages()["0"].data)
-    let tmp = getCurrentPages()["0"].data.address
-    tmp['schoolName'] = parseInt(e.detail.value) 
-    that.setData({
-      // schoolName: that.data.school_Arr[e.detail.value],
-      address:tmp
+    db.collection('customer_inf')
+    .where({
+      _openid: this.openid,
+    })
+    .get({
+      success: (res) => {
+        console.log(res)
+        this.setData({
+          name: res.data[0].name,
+          group: res.data[0].group,
+          phone: res.data[0].phone
+        })
+      }
     })
   },
 
-  // 地址类型
-  getAddress: function (e) {
-    var that = this
-    let tmp = getCurrentPages()["0"].data.address
-    tmp['addressItem'] = parseInt(e.detail.value) 
-    that.setData({
-      address: tmp
+  // 获取用户openid
+  getOpenid() {
+    let that = this;
+    wx.cloud.callFunction({
+      name: 'add',
+      complete: res => {
+        console.log('云函数获取到的openid: ', res.result.openid);
+        var openid = res.result.openid;
+        that.setData({
+          openid: openid
+        })
+      }
     })
   },
 
-  // // 宿舍楼号
-  // getApartment: function (e) {
-  //   var that = this
-  //   // console.log(e)
-  //   that.setData({
-  //     apartmentNum: that.data.address_Arr[e.detail.value].toString(),
-  //     apartment: e.detail.value
-  //   })
-  // },
-
-  // // 备注信息
-  // getExtra: function (e) {
-  //   var that = this
-  //   that.setData({
-  //     message: e.detail.value
-  //   })
-  // },
-
-  // addToStorage:function(){
-  //   console.log(getCurrentPages()["0"].data)
-  //   var { name, phone, schoolName, addressItem, apartmentNum } = getCurrentPages()["0"].data;
-  //   var value = { name, phone, schoolName, addressItem, apartmentNum } 
-  //   console.log(value)
-  //   if (value.name && value.phone.length === 11 && value.detail) {
-  //     console.log(value)
-  //     wx.setStorage({
-  //       key: 'address',
-  //       data: value,
-  //       success() {
-  //         wx.navigateBack();
-  //       }
-  //     })
-  //   } else {
-  //     wx.showModal({
-  //       title: '提示',
-  //       content: '请填写完整资料',
-  //       showCancel: false
-  //     })
-  //   }
-  // },
-
+  // 获取表单数据
   formSubmit(e) {
     const value = e.detail.value;
-    // console.log(value)
-    if (value.name && value.phone.length === 11 && value.detail) {
-      console.log(value)
-      wx.setStorage({
-        key: 'address',
-        data: value,
-        success() {
-          wx.navigateBack();
-        }
+    const that = this;
+    that.setData({
+      name: value.name,
+      phone: value.phone,
+      group: value.group
+    })
+    if (value.name && value.phone.length === 11 && value.group) {
+      const { name, phone, group, balance } = that.data
+      const theInfo = { name, phone, group, balance }
+
+      db.collection('customer_inf')
+      .where({
+        _openid:that.openid,
       })
-    } else {
+      .update({
+        data: theInfo,
+        success: (res) => {
+          console.log(res)
+          // 如果有记录则更新，无则新增一条记录
+          if (res.stats.updated==0) {
+            app.addRowToSet('customer_inf', theInfo, e => {
+              console.log(e)
+              wx.showToast({
+                title: '添加成功',
+              })
+            })
+          } else {
+            wx.showToast({
+              title: '更新成功',
+            })
+          }
+      },
+      })
+
+      } else {
       wx.showModal({
         title: '提示',
-        content: '请填写完整资料',
+        content: '请检查并填写正确信息',
         showCancel: false
       })
     }

@@ -83,8 +83,8 @@ Page({
     wx.cloud.callFunction({
       name: 'add',
       complete: res => {
-        console.log('云函数获取到的openid: ', res.result.openId)
-        var openid = res.result.openId;
+        console.log('云函数获取到的openid: ', res.result.openid)
+        var openid = res.result.openid;
         that.setData({
           openid: openid,
         })
@@ -131,7 +131,6 @@ Page({
 
       // ------生成订单信息-------
       let tmp = that.data.address
-      tmp['schoolName'] = app.globalData.school_Arr[that.data.address['schoolName']]
       tmp['addressItem'] = app.globalData.address_Arr[that.data.address['addressItem']]
       tmp['orderTime'] = app.CurrentTime_show()
       tmp['orderSuccess'] = true
