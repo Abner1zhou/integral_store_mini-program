@@ -8,6 +8,7 @@ Page({
     address: {},
     isAdmin: -1,
     openid: '',
+    balance: 0,
     // 管理员openID
     adiminArr: [
       'ofDnu4s_Aio-eWGe7tYBKhPUhhec',
@@ -17,7 +18,6 @@ Page({
   onLoad() {
     var that = this;
     that.getOpenidAndOrders();
-    // console.log(that.data)
   },
 
   onShow() {
@@ -37,12 +37,12 @@ Page({
     })
   },
   onPullDownRefresh: function () {
-    var that = this
-    that.getOpenidAndOrders()
-    var timer
+    var that = this;
+    that.getOpenidAndOrders();
+    var timer;
 
     (timer = setTimeout(function () {
-      wx.stopPullDownRefresh()
+      wx.stopPullDownRefresh();
     }, 500));
 
   },
@@ -53,7 +53,7 @@ Page({
     wx.cloud.callFunction({
       name: 'add',
       complete: res => {
-        console.log('云函数获取到的openid: ', res.result.openid)
+        console.log('云函数获取到的openid: ', res.result.openid);
         var openid = res.result.openid;
         var isAdmin = null;
         that.setData({

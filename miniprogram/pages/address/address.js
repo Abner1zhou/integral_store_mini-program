@@ -13,6 +13,7 @@ Page({
 
   onLoad() {
     var self = this;
+    // 获取openid
     wx.getStorage({
       key: 'openid',
       success: (res) => {
@@ -21,9 +22,11 @@ Page({
         })
       }
     })
+
+    // 查找数据中已有的收货信息
     db.collection('customer_inf')
     .where({
-      _openid: this.openid,
+      _openid: self.openid,
     })
     .get({
       success: (res) => {
@@ -31,22 +34,8 @@ Page({
         this.setData({
           name: res.data[0].name,
           group: res.data[0].group,
-          phone: res.data[0].phone
-        })
-      }
-    })
-  },
-
-  // 获取用户openid
-  getOpenid() {
-    let that = this;
-    wx.cloud.callFunction({
-      name: 'add',
-      complete: res => {
-        console.log('云函数获取到的openid: ', res.result.openid);
-        var openid = res.result.openid;
-        that.setData({
-          openid: openid
+          phone: res.data[0].phone,
+          balance: res.data[0].balance
         })
       }
     })

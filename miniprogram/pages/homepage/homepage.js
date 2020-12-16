@@ -2,26 +2,44 @@
 
 
 const app = getApp()
+const db = wx.cloud.database();
 
 Page({
   data: {
     swiperImgNo: 1,
     imgSwiperUrl: '',
     fruitInfo: [],
-    typeCat: [
-      { id: 0, name: "美味鲜果" },
-      { id: 1, name: "今日特惠" },
-      { id: 2, name: "新鲜上架" },
-      { id: 3, name: "小易推荐" },
+    typeCat: [{
+        id: 0,
+        name: "美味鲜果"
+      },
+      {
+        id: 1,
+        name: "今日特惠"
+      },
+      {
+        id: 2,
+        name: "新鲜上架"
+      },
+      {
+        id: 3,
+        name: "小易推荐"
+      },
     ],
     activeTypeId: 0,
-    isShow:true, 
-    openid: '',   
-    offLine:null  //是否维护
+    isShow: true,
+    openid: '',
+    offLine: null, //是否维护
+    address: {
+      name: '',
+      phone: '',
+      group: '',
+      balance: 0
+    }
   },
 
   // 获取用户openid
-  getOpenid() {
+  getOpenidAndUserInfo() {
     let that = this;
     wx.cloud.callFunction({
       name: 'add',
@@ -31,16 +49,46 @@ Page({
         that.setData({
           openid: openid
         })
+        wx.setStorage({
+          data: openid,
+          key: 'openid',
+        })
+        // 从数据库获取用户信息
+        db.collection('customer_inf')
+          .where({
+            _openid: openid,
+          })
+          .get({
+            success: (res) => {
+              console.log(res);
+              var {  _id, _openid, balance, group, name, phone } = res.data[0];
+              var tmp = {
+                name,
+                group,
+                phone,
+                balance
+              };
+              this.setData({
+                address: tmp
+              })
+              wx.setStorage({
+                data: tmp,
+                key: 'address'
+              })
+            }
+          })
       }
     })
   },
 
   // ------------加入购物车------------
-  addCartByHome: function(e) {
+  addCartByHome: function (e) {
     // console.log(e.currentTarget.dataset._id)
     var self = this
     let newItem = {}
-    app.getInfoWhere('fruit-board', { _id: e.currentTarget.dataset._id },
+    app.getInfoWhere('fruit-board', {
+        _id: e.currentTarget.dataset._id
+      },
       e => {
         // console.log(e.data["0"])
         var newCartItem = e.data["0"]
@@ -55,7 +103,7 @@ Page({
 
 
   // ------------分类展示切换---------
-  typeSwitch: function(e) {
+  typeSwitch: function (e) {
     // console.log(e.currentTarget.id)
     getCurrentPages()["0"].setData({
       activeTypeId: parseInt(e.currentTarget.id)
@@ -71,9 +119,11 @@ Page({
           }
         )
         break;
-      // 今日特惠
+        // 今日特惠
       case '1':
-        app.getInfoWhere('fruit-board', {myClass:'1'},
+        app.getInfoWhere('fruit-board', {
+            myClass: '1'
+          },
           e => {
             getCurrentPages()["0"].setData({
               fruitInfo: e.data
@@ -81,9 +131,9 @@ Page({
           }
         )
         break;
-      // 销量排行
+        // 销量排行
       case '2':
-        app.getInfoByOrder('fruit-board','time','desc',
+        app.getInfoByOrder('fruit-board', 'time', 'desc',
           e => {
             getCurrentPages()["0"].setData({
               fruitInfo: e.data
@@ -91,9 +141,11 @@ Page({
           }
         )
         break;
-      // 店主推荐
+        // 店主推荐
       case '3':
-        app.getInfoWhere('fruit-board', { recommend: '1' },
+        app.getInfoWhere('fruit-board', {
+            recommend: '1'
+          },
           e => {
             getCurrentPages()["0"].setData({
               fruitInfo: e.data
@@ -106,7 +158,7 @@ Page({
 
 
   // ---------点击跳转至详情页面-------------
-  tapToDetail: function(e) {
+  tapToDetail: function (e) {
     wx.navigateTo({
       url: '../detail/detail?_id=' + e.currentTarget.dataset.fid,
     })
@@ -123,11 +175,7 @@ Page({
       isShow: false
     })
     // 获取openId
-    this.getOpenid();
-    wx.setStorage({
-      data: this.openid,
-      key: 'openid',
-    })
+    this.getOpenidAndUserInfo();
   },
 
   onReady: function () {
@@ -136,17 +184,7 @@ Page({
 
   onShow: function () {
     var that = this
-    // 水果信息
-    // app.getInfoFromSet('fruit-board', {},
-    //   e => {
-    //     // console.log(e.data)
-    //     getCurrentPages()["0"].setData({
-    //       fruitInfo: e.data,
-    //       isShow: true
-    //     })
-    //     wx.hideLoading()
-    //   }
-    // )
+
     app.getInfoByOrder('fruit-board', 'time', 'desc',
       e => {
         getCurrentPages()["0"].setData({
@@ -158,7 +196,9 @@ Page({
     )
     // console.log(app.globalData.offLine)
     // 是否下线
-    app.getInfoWhere('setting', { "option": "offLine" },
+    app.getInfoWhere('setting', {
+        "option": "offLine"
+      },
       e => {
         that.setData({
           offLine: e.data["0"].offLine

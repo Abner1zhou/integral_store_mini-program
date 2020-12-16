@@ -7,7 +7,7 @@
         <view class='nickname'>
           <open-data type="userNickName"></open-data>
         </view>
-        <!-- <text class="nickname">{{nickname}}</text> -->
+        <view class='nickname'>余额：{{balance}}</view>
     </view>
 
     <!-- 后台管理 -->
@@ -16,15 +16,15 @@
     <!-- 订单管理 -->
     <view class="bgInfo {{openid}}" bindtap='goToBgManage' hidden="{{!(isAdmin >= 0)}}">订单管理</view>
 
-    <!-- 地址管理 -->
+    <!-- 个人信息管理 -->
     <view class="address-box">
         <view class="address-manage">
-            <navigator url="/pages/address/address">地址管理</navigator>
+            <navigator url="/pages/address/address">个人信息管理</navigator>
         </view>
         <view wx:if="{{hasAddress}}" class="address-list">
             <view>姓名：{{address.name}}</view>
-            <view>电话：{{address.phone}}</view>
             <view>部门：{{address.group}}</view>
+            <view>电话：{{address.phone}}</view>
         </view>
     </view>
 
