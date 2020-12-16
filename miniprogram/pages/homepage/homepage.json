@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "墨铭水果园",
+  "navigationBarTitleText": "AIIT活动中心",
   "usingComponents": {
     "mySearch":"/components/search/search",
     "swiper": "/components/swiper/swiper"

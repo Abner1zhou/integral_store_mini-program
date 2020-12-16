@@ -15,14 +15,10 @@ Page({
       },
       {
         id: 1,
-        name: "今日特惠"
-      },
-      {
-        id: 2,
         name: "新鲜上架"
       },
       {
-        id: 3,
+        id: 2,
         name: "小易推荐"
       },
     ],
@@ -225,7 +221,7 @@ Page({
 
   onShareAppMessage: function () {
     return {
-      title: '水果园byVoyz',
+      title: 'AIIT活动中心',
       imageUrl: '../../images/icon/fruit.jpg',
       path: '/pages/homepage/homepage'
     }

@@ -7,7 +7,7 @@ page {background-color: rgb(245, 249, 253)}
 
 /* 分类选项卡 */
 .type-container {display: flex;justify-content: start;padding: 5rpx 20rpx 0 20rpx;position: relative;top: -93rpx;background: rgba(0, 0, 0, 0.137);margin-top: 15rpx;}
-.type-container .type-item{width: 25%;height: 60rpx;}
+.type-container .type-item{width: 33%;height: 60rpx;}
 .type-container .type-item view{font-size: 25rpx;text-align: center;line-height: 60rpx;border-radius: 10rpx 10rpx 0 0;margin: 0 3rpx;}
 .type-contain.type-container .type-item{width: 150rpx;height: 60rpx;}
 .type-container .type-item view{font-size: 25rpx;text-align: center;line-height: 60rpx;
