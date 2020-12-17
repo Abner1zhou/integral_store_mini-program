@@ -140,79 +140,22 @@ Page({
       order_master['total'] = that.data.total
 
       app.addRowToSet('order_master', order_master, e => {
-        console.log("订单状态已修改：【订单生成】" + e)
-      })
+        console.log("订单状态已修改：【订单生成】" + e);
+        wx.showToast({
+          title: '支付成功',
+          duration: 2000,
+        });
     })
-    .catch(err => {
-      console.log(err)
+    wx.setStorage({
+      data: that.data.address,
+      key: 'address',
     })
-
-
-    // wx.cloud.callFunction({
-    //   name: 'pay_balance',
-    //   data: {
-    //     openid: that.__data__.openid,
-    //     total: that.__data__.total
-    //   },
-    //   complete: (res) => {
-    //     console.log(res)
-    //     if (res.result.balanceEnough) {
-    //       that.data.address.balance = res.result.balance
-    //       that.setData({
-    //         address: that.data.address
-    //       })
-    //       // ------生成订单信息-------
-    //       let tmp = that.data.address
-    //       tmp['orderTime'] = app.CurrentTime_show()
-    //       tmp['orderSuccess'] = true
-    //       tmp['finished'] = false
-
-    //       const order_master = tmp;
-    //       var tmpList = []
-    //       that.data.orders.forEach((val, idx, obj) => {
-    //         tmpList.push([val.name, val.num, val.price])
-    //       })
-    //       order_master['fruitList'] = tmpList
-    //       order_master['total'] = that.data.total
-
-    //       app.addRowToSet('order_master', order_master, e => {
-    //         console.log("订单状态已修改：【订单生成】" + e)
-    //       })
-
-    //     } else {
-    //       wx.showModal({
-    //         title: '余额不足',
-    //         content: '请您多参加活动哦~',
-    //       })
-    //     }
-    //   }
-    // })
-  },
-
-
-  // 支付后的订单信息
-  getListAfterPay: function (that) {
-    var p = new Promise((resolve, reject) => {
-      let theList = []
-      that.data.orders.forEach((val, idx, obj) => {
-        var {
-          name,
-          num,
-          price
-        } = val
-        var tmpInfo = {
-          name,
-          num,
-          price
-        }
-        theList.push(tmpInfo)
-      })
-      resolve(theList)
-    }).then(res => {
-      // console.log(res)
-      that.setData({
-        myList: res
-      })
-    })
-  },
+    setTimeout(wx.switchTab({
+      url: '../me/me',
+    }), 2000)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  }
 })
