@@ -25,25 +25,26 @@ Page({
     /**
      * 获取本地缓存 地址信息
      */
+    this.getUserAddress();
+  },
+
+  // 获取用户信息
+  getUserAddress() {
     wx.getStorage({
       key: 'address',
-      success: function (res) {
-        self.setData({
+      success: res => {
+        this.setData({
           hasAddress: true,
           address: res.data
         })
       }
     })
   },
+
   onPullDownRefresh: function () {
-    var that = this;
-    that.getOpenidAndOrders();
+    this.getOpenidAndOrders();
+    this.getUserAddress();
     var timer;
-
-    (timer = setTimeout(function () {
-      wx.stopPullDownRefresh();
-    }, 500));
-
   },
 
   // 获取用户openid
