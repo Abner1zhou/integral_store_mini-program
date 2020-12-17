@@ -7,7 +7,6 @@
     "pages/cart/cart",
     "pages/me/me",
     "pages/detail/detail",
-    "pages/pay/pay",
     "pages/address/address",
     "pages/orders/orders"
   ],

@@ -88,44 +88,105 @@ Page({
   toPay() {
     var that = this;
     console.log(that)
-    wx.cloud.callFunction({
-      name: 'pay_balance',
-      data: {
-        openid: that.__data__.openid,
-        total: that.__data__.total
-      },
-      complete: (res) => {
-        if (res.result.balanceEnough) {
-          that.data.address.balance = res.result.balance
-          that.setData({
-            address: that.data.address
-          })
-          // ------生成订单信息-------
-          let tmp = that.data.address
-          tmp['orderTime'] = app.CurrentTime_show()
-          tmp['orderSuccess'] = true
-          tmp['finished'] = false
-
-          const order_master = tmp;
-          var tmpList = []
-          that.data.orders.forEach((val, idx, obj) => {
-            tmpList.push([val.name, val.num, val.price])
-          })
-          order_master['fruitList'] = tmpList
-          order_master['total'] = that.data.total
-
-          app.addRowToSet('order_master', order_master, e => {
-            console.log("订单状态已修改：【订单生成】" + e)
-          })
-
-        } else {
-          wx.showModal({
-            title: '余额不足',
-            content: '请您多参加活动哦~',
-          })
-        }
+    const db = wx.cloud.database();
+    var balance = 0;
+    db.collection('customer_inf').where({
+      _openid: that.data.openid
+    })
+    .get()
+    .then(res => {
+      console.log(res)
+      balance = res.data[0].balance
+    })
+    .then(() => {
+      // 余额足够则扣款，并更新数据库
+      if (balance >= that.data.total) {
+        balance = balance - that.data.total;
+        db.collection('customer_inf')
+        .where({
+          _openid: that.data.openid
+        })
+        .update({
+          data: {
+            balance: balance
+          }
+        })
+        return balance
+      } else {
+        wx.showModal({
+          title: '余额不足',
+          content: '请您多参加活动哦~',
+        })
+        throw Error("余额不足")
       }
     })
+    .then(res => {
+      that.data.address.balance = res
+      that.setData({
+        address: that.data.address
+      })
+      // ------生成订单信息-------
+      let tmp = that.data.address
+      tmp['orderTime'] = app.CurrentTime_show()
+      tmp['orderSuccess'] = true
+      tmp['finished'] = false
+
+      const order_master = tmp;
+      var tmpList = []
+      that.data.orders.forEach((val, idx, obj) => {
+        tmpList.push([val.name, val.num, val.price])
+      })
+      order_master['fruitList'] = tmpList
+      order_master['total'] = that.data.total
+
+      app.addRowToSet('order_master', order_master, e => {
+        console.log("订单状态已修改：【订单生成】" + e)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+
+    // wx.cloud.callFunction({
+    //   name: 'pay_balance',
+    //   data: {
+    //     openid: that.__data__.openid,
+    //     total: that.__data__.total
+    //   },
+    //   complete: (res) => {
+    //     console.log(res)
+    //     if (res.result.balanceEnough) {
+    //       that.data.address.balance = res.result.balance
+    //       that.setData({
+    //         address: that.data.address
+    //       })
+    //       // ------生成订单信息-------
+    //       let tmp = that.data.address
+    //       tmp['orderTime'] = app.CurrentTime_show()
+    //       tmp['orderSuccess'] = true
+    //       tmp['finished'] = false
+
+    //       const order_master = tmp;
+    //       var tmpList = []
+    //       that.data.orders.forEach((val, idx, obj) => {
+    //         tmpList.push([val.name, val.num, val.price])
+    //       })
+    //       order_master['fruitList'] = tmpList
+    //       order_master['total'] = that.data.total
+
+    //       app.addRowToSet('order_master', order_master, e => {
+    //         console.log("订单状态已修改：【订单生成】" + e)
+    //       })
+
+    //     } else {
+    //       wx.showModal({
+    //         title: '余额不足',
+    //         content: '请您多参加活动哦~',
+    //       })
+    //     }
+    //   }
+    // })
   },
 
 
