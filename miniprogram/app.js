@@ -60,10 +60,15 @@ App({
   },
 
   // 获取时间戳
-  CurrentTime: function() {
+  CurrentTime: function(lastMonth=false) {
     var now = new Date();
     var year = now.getFullYear();       //年
-    var month = now.getMonth() + 1;     //月
+    if (lastMonth) {
+      var month = now.getMonth();     //月
+    } else {
+      var month = now.getMonth() + 1;     //月
+    }
+    
     var day = now.getDate();            //日
     var hh = now.getHours();            //时
     var mm = now.getMinutes();          //分

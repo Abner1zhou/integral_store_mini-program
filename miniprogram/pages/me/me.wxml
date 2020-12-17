@@ -7,7 +7,7 @@
         <view class='nickname'>
           <open-data type="userNickName"></open-data>
         </view>
-        <view class='nickname'>余额：{{balance}}</view>
+        <view class='nickname'>余额：{{address.balance}}</view>
     </view>
 
     <!-- 后台管理 -->
@@ -32,8 +32,7 @@
     <view class="orders-box">
         <view class="orders">我的订单</view>
         <view class="orders-list" wx:for="{{orders}}" wx:key="index">
-
-            <view class="orders-number" wx:if="{{item.paySuccess && !item.sending}}">订单状态：已支付</view>
+            <view class="orders-number" wx:if="{{item.orderSuccess && !item.sending}}">订单状态：已支付</view>
             <view class="orders-number" wx:if="{{item.sending && !item.finished}}">订单状态：配送中</view>
             <view class="orders-number" wx:if="{{item.finished}}">订单状态：已送达</view>
 

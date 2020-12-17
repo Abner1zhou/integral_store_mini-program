@@ -22,7 +22,7 @@
 <!-- 商品图 -->
 <view class='extra'></view>
 <view class='fruit-container'>
-  <!-- 水果信息卡片 -->
+  <!-- 礼品信息卡片 -->
   <block wx:for="{{fruitInfo}}" wx:key='fruitID'>
     <view class='fruit-item' bindtap='tapToDetail' data-fID="{{item._id}}" wx:if="{{item.onShow}}">
       <!-- 图片 -->
@@ -56,7 +56,7 @@
 <!-- 底部 -->
 <view class='homeBottom'>
   <view class='bottomLine'></view>
-  <view class='bottomWord'>coding by Voyz_Shen</view>
+  <view class='bottomWord'>coding by Zhou</view>
   <view class='bottomLine'></view>
 </view>
 

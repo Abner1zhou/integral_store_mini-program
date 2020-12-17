@@ -8,7 +8,6 @@ Page({
     address: {},
     isAdmin: -1,
     openid: '',
-    balance: 0,
     // 管理员openID
     adiminArr: [
       'ofDnu4s_Aio-eWGe7tYBKhPUhhec',
@@ -61,7 +60,7 @@ Page({
           isAdmin: that.data.adiminArr.indexOf(openid)
         })
         app.getInfoWhere('order_master',{
-          openid: openid
+          _openid: openid
         },e=>{
           console.log(e.data)
           var tmp = []

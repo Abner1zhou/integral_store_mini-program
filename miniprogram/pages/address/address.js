@@ -18,7 +18,7 @@ Page({
       key: 'openid',
       success: (res) => {
         self.setData({
-          openid: this.openid
+          openid: res.data
         })
       }
     })

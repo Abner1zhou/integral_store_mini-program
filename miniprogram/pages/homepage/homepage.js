@@ -11,11 +11,11 @@ Page({
     fruitInfo: [],
     typeCat: [{
         id: 0,
-        name: "美味鲜果"
+        name: "精美礼品"
       },
       {
         id: 1,
-        name: "新鲜上架"
+        name: "新品上架"
       },
       {
         id: 2,
@@ -56,7 +56,6 @@ Page({
           })
           .get({
             success: (res) => {
-              console.log(res);
               var {  _id, _openid, balance, group, name, phone } = res.data[0];
               var tmp = {
                 name,
@@ -115,21 +114,13 @@ Page({
           }
         )
         break;
-        // 今日特惠
+
+        // 新品上架
       case '1':
         app.getInfoWhere('fruit-board', {
-            myClass: '1'
-          },
-          e => {
-            getCurrentPages()["0"].setData({
-              fruitInfo: e.data
-            })
-          }
-        )
-        break;
-        // 销量排行
-      case '2':
-        app.getInfoByOrder('fruit-board', 'time', 'desc',
+          // 一个月内上架的商品为新品
+          time: db.command.gt(parseInt(app.CurrentTime(true)))
+        },
           e => {
             getCurrentPages()["0"].setData({
               fruitInfo: e.data
@@ -138,9 +129,9 @@ Page({
         )
         break;
         // 店主推荐
-      case '3':
+      case '2':
         app.getInfoWhere('fruit-board', {
-            recommend: '1'
+            recommend: 1
           },
           e => {
             getCurrentPages()["0"].setData({
@@ -165,7 +156,7 @@ Page({
   onLoad: function (options) {
     var that = this
     wx.showLoading({
-      title: '生活要领鲜',
+      title: '北大欢迎你',
     })
     that.setData({
       isShow: false
