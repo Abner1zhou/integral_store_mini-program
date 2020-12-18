@@ -21,7 +21,6 @@ App({
       appid: 'wx0dd8c5c9ebe90a78',
       mch_id: '1519277861',
       apikey: 'James487493259359826923695832443',
-      offLine:false,
     }
   },
 
