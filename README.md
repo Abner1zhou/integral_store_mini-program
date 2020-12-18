@@ -18,7 +18,7 @@
 
 ## 安装
 ```
-git clone https://github.com/Voyzz/Fruit-store-mp
+git clone https://gitee.com/its_onion/integral_store_mini-program.git
 ```
 
 
