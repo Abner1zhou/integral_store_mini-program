@@ -8,7 +8,9 @@
     "pages/me/me",
     "pages/detail/detail",
     "pages/address/address",
-    "pages/orders/orders"
+    "pages/orders/orders",
+    "pages/poster/poster",
+    "pages/posterDetail/posterDetail"
   ],
   "window": {
     "backgroundColor": "#F0F0F0",
@@ -33,6 +35,12 @@
         "text": "购物车",
         "iconPath": "images/tabBar/cart.png",
         "selectedIconPath": "images/tabBar/cart-sel.png"
+      },
+      {
+        "pagePath": "pages/poster/poster",
+        "text": "活动",
+        "iconPath": "images/tabBar/act.png",
+        "selectedIconPath": "images/tabBar/act-sel.png"
       },
       {
         "pagePath": "pages/me/me",

@@ -12,6 +12,7 @@ App({
     }
 
     this.globalData = {
+      userInfo: null,
       cloudRoot : "7069-pig-1-2gykytc24ac43904-1304113058/",
       carts:[],  //购物车
       tmpNum: 0,

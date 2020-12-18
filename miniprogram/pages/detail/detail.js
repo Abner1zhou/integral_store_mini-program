@@ -97,7 +97,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (e) {
-    // console.log(e._id)
     var that = this
     that.setData({
       articleID: e._id

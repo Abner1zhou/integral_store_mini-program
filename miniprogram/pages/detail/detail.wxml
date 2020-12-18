@@ -34,7 +34,12 @@
   <view class='other-info'>
     <!-- 选项卡 -->
     <view class="goods-tab-box">
-        <view class="goods-tab-nav {{curIndex === 0 ?'on':''}}" bindtap="bindTap" data-index="0">详情</view>
+        <view class="goods-tab-nav {{curIndex === 0}}" bindtap="bindTap" data-index="0">详情</view>
+    </view>
+    <view class="goods-content">
+        <view wx:if="{{curIndex === 0}}" class='theDetail'>
+          {{fruitDetail.detail}}
+        </view>
     </view>
 
   </view>

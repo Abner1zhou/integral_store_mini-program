@@ -55,13 +55,35 @@ Page({
           })
           .get({
             success: (res) => {
-              var {  _id, _openid, balance, group, name, phone } = res.data[0];
+              if (res.data[0]) {
+                var {
+                  _id,
+                  _openid,
+                  balance,
+                  group,
+                  name,
+                  phone
+                } = res.data[0];
+              } else {
+                var tmp = {
+                  name: '',
+                  group: '',
+                  phone: '',
+                  balance: 0
+                };
+                app.addRowToSet('customer_inf', tmp, 
+                e => {});
+                this.setData({
+                  address: tmp
+                });
+              }
               var tmp = {
                 name,
                 group,
                 phone,
                 balance
               };
+              
               this.setData({
                 address: tmp
               })
@@ -105,7 +127,7 @@ Page({
     switch (e.currentTarget.id) {
       // 全部展示
       case '0':
-        app.getInfoByOrder('fruit-board', 'time', 'desc', 
+        app.getInfoByOrder('fruit-board', 'time', 'desc',
           e => {
             getCurrentPages()["0"].setData({
               fruitInfo: e.data
@@ -116,16 +138,18 @@ Page({
 
         // 新品上架
       case '1':
-        app.getInfoWhere('fruit-board', {
+        db.collection('fruit-board')
+        .where({
           // 一个月内上架的商品为新品
           time: db.command.gt(parseInt(app.CurrentTime(true)))
-        },
-          e => {
-            getCurrentPages()["0"].setData({
-              fruitInfo: e.data
-            })
-          }
-        )
+        })
+        .orderBy('time', 'desc')
+        .get()
+        .then(e => {
+          getCurrentPages()["0"].setData({
+            fruitInfo: e.data
+          })
+        })
         break;
         // 店主推荐
       case '2':
@@ -160,8 +184,7 @@ Page({
     that.setData({
       isShow: false
     })
-    // 获取openId
-    this.getOpenidAndUserInfo();
+    this.getOpenidAndUserInfo()
   },
 
   onReady: function () {

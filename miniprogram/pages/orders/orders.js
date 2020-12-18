@@ -1,5 +1,4 @@
 const app = getApp()
-const md5 = require("../../utils/md5.js")
 
 Page({
   data: {
@@ -9,40 +8,20 @@ Page({
     orders: [],
     myList: [],
     openid: '',
-    nonce_str: ''
+    // nonce_str: ''
   },
 
   onReady() {
     const self = this;
-    // console.log(app.globalData.carts)
 
     // 32位随机字符串
-    var nonce_str = app.RndNum()
+    // var nonce_str = app.RndNum()
 
-    // // 获取ip地址
-    // wx.cloud.callFunction({
-    //   name: 'getIP'
-    // }).then(e=>{
-    //   if(e){
-    //     let spbill_create_ip = e.result.body.split("query\"\:\"")[1].split("\"\,\"")[0]
-    //     console.log("IP地址为：" + spbill_create_ip)
-    //     self.setData({
-    //       spbill_create_ip: spbill_create_ip
-    //     })
-    //   }
-    // }).catch(err=>{
-    //   if (err) {
-    //     wx.showModal({
-    //       title: '错误',
-    //       content: '请您重新下单~',
-    //     })
-    //   }
-    // })
 
     // 获取总价和openid
     self.setData({
       orders: app.globalData.carts,
-      nonce_str: nonce_str
+      // nonce_str: nonce_str
     })
     wx.getStorage({
       key: 'openid',
@@ -61,10 +40,13 @@ Page({
     wx.getStorage({
       key: 'address',
       success(res) {
-        self.setData({
-          address: res.data,
-          hasAddress: true
-        })
+        if (res.data.name) {
+          self.setData({
+            address: res.data,
+            hasAddress: true
+          })
+        }
+        
       }
     })
   },
@@ -87,75 +69,82 @@ Page({
   // -------------!! 支付！！------------------
   toPay() {
     var that = this;
-    console.log(that)
-    const db = wx.cloud.database();
-    var balance = 0;
-    db.collection('customer_inf').where({
-      _openid: that.data.openid
-    })
-    .get()
-    .then(res => {
-      console.log(res)
-      balance = res.data[0].balance
-    })
-    .then(() => {
-      // 余额足够则扣款，并更新数据库
-      if (balance >= that.data.total) {
-        balance = balance - that.data.total;
-        db.collection('customer_inf')
-        .where({
+    if (that.data.hasAddress) {
+      const db = wx.cloud.database();
+      var balance = 0;
+      db.collection('customer_inf').where({
           _openid: that.data.openid
         })
-        .update({
-          data: {
-            balance: balance
+        .get()
+        .then(res => {
+          console.log(res)
+          balance = res.data[0].balance
+        })
+        .then(() => {
+          // 余额足够则扣款，并更新数据库
+          if (balance >= that.data.total) {
+            balance = balance - that.data.total;
+            db.collection('customer_inf')
+              .where({
+                _openid: that.data.openid
+              })
+              .update({
+                data: {
+                  balance: balance
+                }
+              })
+            return balance
+          } else {
+            wx.showModal({
+              title: '余额不足',
+              content: '请您多参加活动哦~',
+            })
+            throw Error("余额不足")
           }
         })
-        return balance
-      } else {
-        wx.showModal({
-          title: '余额不足',
-          content: '请您多参加活动哦~',
+        .then(res => {
+          that.data.address.balance = res
+          that.setData({
+            address: that.data.address
+          })
+          // ------生成订单信息-------
+          let tmp = that.data.address
+          tmp['orderTime'] = app.CurrentTime_show()
+          tmp['orderSuccess'] = true
+          tmp['finished'] = false
+
+          const order_master = tmp;
+          var tmpList = []
+          that.data.orders.forEach((val, idx, obj) => {
+            tmpList.push([val.name, val.num, val.price])
+          })
+          order_master['fruitList'] = tmpList
+          order_master['total'] = that.data.total
+
+          app.addRowToSet('order_master', order_master, e => {
+            console.log("订单状态已修改：【订单生成】" + e);
+            wx.showToast({
+              title: '支付成功',
+              duration: 2000,
+            });
+          })
+          wx.setStorage({
+            data: that.data.address,
+            key: 'address',
+          })
+          setTimeout(wx.switchTab({
+            url: '../me/me',
+          }), 2000)
         })
-        throw Error("余额不足")
-      }
-    })
-    .then(res => {
-      that.data.address.balance = res
-      that.setData({
-        address: that.data.address
+        .catch(err => {
+          console.log(err)
+        })
+    } else {
+      wx.showModal({
+        title: 'Oh No',
+        content: '请填写个人信息~',
       })
-      // ------生成订单信息-------
-      let tmp = that.data.address
-      tmp['orderTime'] = app.CurrentTime_show()
-      tmp['orderSuccess'] = true
-      tmp['finished'] = false
-
-      const order_master = tmp;
-      var tmpList = []
-      that.data.orders.forEach((val, idx, obj) => {
-        tmpList.push([val.name, val.num, val.price])
-      })
-      order_master['fruitList'] = tmpList
-      order_master['total'] = that.data.total
-
-      app.addRowToSet('order_master', order_master, e => {
-        console.log("订单状态已修改：【订单生成】" + e);
-        wx.showToast({
-          title: '支付成功',
-          duration: 2000,
-        });
-    })
-    wx.setStorage({
-      data: that.data.address,
-      key: 'address',
-    })
-    setTimeout(wx.switchTab({
-      url: '../me/me',
-    }), 2000)
-  })
-  .catch(err => {
-    console.log(err)
-  })
+    }
   }
+
 })

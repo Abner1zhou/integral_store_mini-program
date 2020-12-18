@@ -1,5 +1,6 @@
 // page/component/new-pages/user/user.js
 const app = getApp();
+const db = wx.cloud.database();
 
 Page({
   data: {
@@ -33,10 +34,17 @@ Page({
     wx.getStorage({
       key: 'address',
       success: res => {
-        this.setData({
-          hasAddress: true,
-          address: res.data
-        })
+        if (res.data.name) {
+          this.setData({
+            hasAddress: true,
+            address: res.data
+          })
+        } else {
+          this.setData({
+            address: res.data
+          })
+        }
+
       }
     })
   },
@@ -59,19 +67,22 @@ Page({
           openid: res.data,
           isAdmin: that.data.adiminArr.indexOf(res.data)
         })
-        app.getInfoWhere('order_master',{
-          _openid: openid
-        },e=>{
-          console.log(e.data)
-          var tmp = []
-          var len = e.data.length
-          for (var i = 0; i < len;i++){
-            tmp.push(e.data.pop())
-          }
-          that.setData({
-            orders: tmp
-          })
+        db.collection('order_master')
+        .where({
+          _openid: that.data.openid
         })
+        .get()
+        .then(
+          e=>{
+            var tmp = []
+            var len = e.data.length
+            for (var i = 0; i < len;i++){
+              tmp.push(e.data.pop())
+            }
+            that.setData({
+              orders: tmp
+            })         
+          })
       }
     })
   },
