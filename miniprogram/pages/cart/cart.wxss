@@ -133,7 +133,7 @@ page{
 }
 
 .cartBtn {
-  width: 120rpx;
+  width: 150rpx;
   height: 45rpx;
   line-height: 45rpx;
   font-size: 25rpx;

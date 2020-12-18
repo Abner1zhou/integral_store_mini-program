@@ -11,7 +11,7 @@
     </view>
 
     <!-- 后台管理 -->
-    <view class="bgInfo {{openid}}" bindtap='goToBgInfo' hidden="{{!(isAdmin >= 0)}}">后台管理</view>
+    <view class="bgInfo {{openid}}" bindtap='goToBgInfo' hidden="{{!(isAdmin >= 0)}}">货物管理</view>
 
     <!-- 订单管理 -->
     <view class="bgInfo {{openid}}" bindtap='goToBgManage' hidden="{{!(isAdmin >= 0)}}">订单管理</view>

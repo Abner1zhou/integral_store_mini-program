@@ -3,13 +3,8 @@
 <view class='tapCard'>
   <view class="addCard {{cardNum === 1 ? 'tapOn':'tapOff'}} " bindtap='tapTo1'>添加商品</view>
   <view class="delCard {{cardNum === 2 ? 'tapOn':'tapOff'}} " bindtap='tapTo2'>上架修改</view>
-  <view class="deliver {{cardNum === 3 ? 'tapOn':'tapOff'}} " bindtap='tapTo3'>送货管理</view>
 </view>
 
-<!-- 添加商品 -->
-<view class='addFruit' wx:if="{{cardNum === 3}}">
-  <button bindtap='offLine'>打烊？</button>
-</view>
 
 <!-----------------------!!!! 上架修改 !!!!---------------------------->
 <view class='deleteFruit' wx:if="{{cardNum === 2}}">
@@ -23,14 +18,13 @@
       <view wx:for="{{manageList}}" wx:key="time" class='listItem' wx:if="{{item.onShow}}">
         <view>{{item.name}}</view>
         <view class='Btns'>
-          <!-- <view class='changeBtn'>修改</view> -->
           <view class='downBtn' bindtap='downFromLine' id="{{item._id}}">下架</view>
         </view>
       </view>
     </view>
 
-    <!-- 线下商品 -->
-    <view class="weui-cells__title">线下商品</view>
+    <!-- 下架商品 -->
+    <view class="weui-cells__title">下架商品</view>
     <view class="weui-cells weui-cells_after-title">
       <view wx:for="{{manageList}}" wx:key="time" class='listItem' wx:if="{{!item.onShow}}">
         <view>{{item.name}}</view>
@@ -44,10 +38,6 @@
 
   </view>
 
-  <!-- 打烊 -->
-  <view class="weui-btn-area">
-    <button class="weui-btn" type="primary" bindtap="offLine">打烊/营业</button>
-  </view>
 
   <!-- 删除商品 -->
   <view class='myInput'>
@@ -150,7 +140,7 @@
 </view>
 
 <!---------- 优惠信息 ------------->
-<view class="weui-cells__title">优惠信息</view>
+<view class="weui-cells__title">其他信息</view>
 
 <view class="weui-cells weui-cells_after-title">
   <!-- 店主推荐 -->

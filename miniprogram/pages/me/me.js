@@ -44,7 +44,9 @@ Page({
   onPullDownRefresh: function () {
     this.getOpenidAndOrders();
     this.getUserAddress();
-    var timer;
+    setTimeout(function () {
+      wx.stopPullDownRefresh()
+    }, 500);
   },
 
   // 获取用户openid

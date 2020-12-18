@@ -25,7 +25,6 @@ Page({
     activeTypeId: 0,
     isShow: true,
     openid: '',
-    offLine: null, //是否维护
     address: {
       name: '',
       phone: '',
@@ -106,7 +105,7 @@ Page({
     switch (e.currentTarget.id) {
       // 全部展示
       case '0':
-        app.getInfoByOrder('fruit-board', 'time', 'desc',
+        app.getInfoByOrder('fruit-board', 'time', 'desc', 
           e => {
             getCurrentPages()["0"].setData({
               fruitInfo: e.data
@@ -179,17 +178,6 @@ Page({
           isShow: true
         })
         wx.hideLoading()
-      }
-    )
-    // console.log(app.globalData.offLine)
-    // 是否下线
-    app.getInfoWhere('setting', {
-        "option": "offLine"
-      },
-      e => {
-        that.setData({
-          offLine: e.data["0"].offLine
-        })
       }
     )
   },

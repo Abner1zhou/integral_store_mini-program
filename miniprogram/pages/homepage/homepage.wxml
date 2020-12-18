@@ -1,9 +1,7 @@
 <!-- 维护 -->
 <view style='height:100%;width:750rpx;background:white;line-height:1200rpx;text-align:center' wx:if="{{offLine}}">打烊啦~~~~~</view>
 
-<view class='myHomePage' wx:if="{{isShow && !offLine}}">
-<!--搜索框-->
-<mySearch></mySearch>
+<view class='myHomePage' wx:if="{{isShow}}">
 
 <!-- 轮播图 -->
 <view style='height:500rpx;width:100%'> 
