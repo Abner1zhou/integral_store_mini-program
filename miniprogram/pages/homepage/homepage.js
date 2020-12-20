@@ -36,65 +36,42 @@ Page({
   // 获取用户openid
   getOpenidAndUserInfo() {
     let that = this;
-    wx.cloud.callFunction({
-      name: 'add',
-      complete: res => {
-        console.log('云函数获取到的openid: ', res.result.openid);
-        var openid = res.result.openid;
+    wx.getStorage({
+      key: 'openid',
+      success: res => {
         that.setData({
-          openid: openid
+          openid: res.data
         })
-        wx.setStorage({
-          data: openid,
-          key: 'openid',
-        })
-        // 从数据库获取用户信息
-        db.collection('customer_inf')
-          .where({
-            _openid: openid,
-          })
-          .get({
-            success: (res) => {
-              if (res.data[0]) {
-                var {
-                  _id,
-                  _openid,
-                  balance,
-                  group,
-                  name,
-                  phone
-                } = res.data[0];
-              } else {
-                var tmp = {
-                  name: '',
-                  group: '',
-                  phone: '',
-                  balance: 0
-                };
-                app.addRowToSet('customer_inf', tmp, 
-                e => {});
-                this.setData({
-                  address: tmp
-                });
-              }
+        wx.cloud.callFunction({
+          name: 'userInfo',
+          data: {
+            openid: res.data
+          },
+          success: res => {
+            if (res.result.data[0]) {
               var tmp = {
-                name,
-                group,
-                phone,
-                balance
-              };
-              
-              this.setData({
-                address: tmp
-              })
-              wx.setStorage({
-                data: tmp,
-                key: 'address'
-              })
+                name: res.result.data[0].name,
+                group: res.result.data[0].group,
+                phone: res.result.data[0].phone,
+                balance: res.result.data[0].balance
+              }
+            } else {
+              var tmp = {
+                name: '',
+                group: '',
+                phone: '',
+                balance: 0
             }
-          })
-      }
-    })
+            console.log(tmp)
+            app.addRowToSet('customer_inf', tmp, e=>{})
+          }
+            that.setData({
+              address: tmp
+            })
+        }
+      })
+    }
+  })
   },
 
   // ------------加入购物车------------
@@ -139,17 +116,17 @@ Page({
         // 新品上架
       case '1':
         db.collection('fruit-board')
-        .where({
-          // 一个月内上架的商品为新品
-          time: db.command.gt(parseInt(app.CurrentTime(true)))
-        })
-        .orderBy('time', 'desc')
-        .get()
-        .then(e => {
-          getCurrentPages()["0"].setData({
-            fruitInfo: e.data
+          .where({
+            // 一个月内上架的商品为新品
+            time: db.command.gt(parseInt(app.CurrentTime(true)))
           })
-        })
+          .orderBy('time', 'desc')
+          .get()
+          .then(e => {
+            getCurrentPages()["0"].setData({
+              fruitInfo: e.data
+            })
+          })
         break;
         // 店主推荐
       case '2':
@@ -184,7 +161,7 @@ Page({
     that.setData({
       isShow: false
     })
-    this.getOpenidAndUserInfo()
+    // this.getOpenidAndUserInfo()
   },
 
   onReady: function () {

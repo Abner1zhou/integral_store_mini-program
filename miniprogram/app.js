@@ -1,7 +1,7 @@
 //app.js
 App({
   onLaunch: function () {
-    
+
     if (!wx.cloud) {
       console.error('请使用 2.12.3 或以上的基础库以使用云能力')
     } else {
@@ -13,16 +13,69 @@ App({
 
     this.globalData = {
       userInfo: null,
-      cloudRoot : "7069-pig-1-2gykytc24ac43904-1304113058/",
-      carts:[],  //购物车
+      cloudRoot: "7069-pig-1-2gykytc24ac43904-1304113058/",
+      carts: [], //购物车
       tmpNum: 0,
       tempFilePaths: "",
-      admin:["周世聪"],
+      admin: ["周世聪"],
       openId: null,
       appid: 'wx0dd8c5c9ebe90a78',
-      mch_id: '1519277861',
-      apikey: 'James487493259359826923695832443',
+      address: {
+        name: '',
+        phone: '',
+        group: '',
+        balance: 0
+      }
     }
+    
+    // 启动小程序的时候直接获取openid
+    wx.cloud.callFunction({
+      name: 'add',
+      complete: res => {
+        console.log('云函数获取到的openid: ', res.result.openid);
+        var openid = res.result.openid;
+        this.globalData.openId = openid;
+        wx.setStorage({
+          data: this.globalData.openId,
+          key: 'openid',
+        })
+        this.getUserInfo()
+      }
+    })
+
+
+
+  },
+
+  // 获取个人信息
+  getUserInfo() {
+    let that = this;
+    wx.cloud.callFunction({
+      name: 'userInfo',
+      data: {
+        openid: that.globalData.openId
+      },
+      success: res => {
+        if (res.result.data[0]) {
+          var tmp = {
+            name: res.result.data[0].name,
+            group: res.result.data[0].group,
+            phone: res.result.data[0].phone,
+            balance: res.result.data[0].balance
+          }
+        } else {
+          var tmp = {
+            name: '',
+            group: '',
+            phone: '',
+            balance: 0
+          }
+          that.addRowToSet('customer_inf', tmp, e => {})
+        }
+        that.globalData.address = tmp
+
+      }
+    })
   },
 
   // --------------常用----------------
@@ -30,7 +83,7 @@ App({
   // 判断购物车中是否有重复后添加购物车
   isNotRepeteToCart: function (newCartItem) {
     var self = this
-    var isRepete = function() {
+    var isRepete = function () {
       var p = new Promise((resolve, reject) => {
         var flag = false
         self.globalData.carts.forEach((v) => {
@@ -43,36 +96,35 @@ App({
       return p
     }
     isRepete().then((flag) => {
-      if(flag) {
+      if (flag) {
         wx.showToast({
           title: '已经添加过了~',
         })
-      }
-      else{
+      } else {
         this.globalData.carts.push(newCartItem)
       }
     })
   },
 
   // 随机数生成函数
-  RndNum: function(){
+  RndNum: function () {
     return Math.random().toString(32).substr(2, 15);
   },
 
   // 获取时间戳
-  CurrentTime: function(lastMonth=false) {
+  CurrentTime: function (lastMonth = false) {
     var now = new Date();
-    var year = now.getFullYear();       //年
+    var year = now.getFullYear(); //年
     if (lastMonth) {
-      var month = now.getMonth();     //月
+      var month = now.getMonth(); //月
     } else {
-      var month = now.getMonth() + 1;     //月
+      var month = now.getMonth() + 1; //月
     }
-    
-    var day = now.getDate();            //日
-    var hh = now.getHours();            //时
-    var mm = now.getMinutes();          //分
-    var ss = now.getSeconds();           //秒
+
+    var day = now.getDate(); //日
+    var hh = now.getHours(); //时
+    var mm = now.getMinutes(); //分
+    var ss = now.getSeconds(); //秒
 
     var clock = year.toString();
     if (month < 10) clock += "0";
@@ -90,22 +142,22 @@ App({
 
   CurrentTime_show: function () {
     var now = new Date();
-    var year = now.getFullYear();       //年
-    var month = now.getMonth() + 1;     //月
-    var day = now.getDate();            //日
-    var hh = now.getHours();            //时
-    var mm = now.getMinutes();          //分
-    var ss = now.getSeconds();           //秒
+    var year = now.getFullYear(); //年
+    var month = now.getMonth() + 1; //月
+    var day = now.getDate(); //日
+    var hh = now.getHours(); //时
+    var mm = now.getMinutes(); //分
+    var ss = now.getSeconds(); //秒
 
-    var clock = year.toString()+"-";
+    var clock = year.toString() + "-";
     if (month < 10) clock += "0";
-    clock += month+"-";
+    clock += month + "-";
     if (day < 10) clock += "0";
-    clock += day+" ";
+    clock += day + " ";
     if (hh < 10) clock += "0";
-    clock += hh+":";
+    clock += hh + ":";
     if (mm < 10) clock += '0';
-    clock += mm+":";
+    clock += mm + ":";
     if (ss < 10) clock += '0';
     clock += ss;
 
@@ -114,12 +166,12 @@ App({
 
 
   // 获得n分钟前的时间戳
-  beforeNowtimeByMin: function(beforetime) {
+  beforeNowtimeByMin: function (beforetime) {
     var setFormat = function (x) {
       if (x < 10) x = "0" + x;
       return x;
     }
-    var date = new Date();
+    var date = new Date();
     date.setMinutes(date.getMinutes() - beforetime);
     var now = "";
     now = date.getFullYear().toString();
@@ -134,25 +186,25 @@ App({
   // --------------数据库操作----------------
 
   // 向集合内新增记录(集合名，要添加的数据对象，回调函数)
-  addRowToSet: function(setName,infoObject,callback){
+  addRowToSet: function (setName, infoObject, callback) {
     const db = wx.cloud.database()
     db.collection(setName).add({
       data: infoObject,
-      success:callback,
+      success: callback,
       fail: console.error
     })
   },
 
   // 从集合中取出数据
-  getInfoFromSet: function (setName,selectConditionSet,callBack){
+  getInfoFromSet: function (setName, selectConditionSet, callBack) {
     const db = wx.cloud.database()
     db.collection(setName).where(selectConditionSet).get({
-      success:callBack
+      success: callBack
     })
   },
 
   // 从集合中筛选数据
-  getInfoWhere: function (setName,ruleObj,callback) {
+  getInfoWhere: function (setName, ruleObj, callback) {
     const db = wx.cloud.database()
     db.collection(setName).where(ruleObj)
       .get({
@@ -162,7 +214,7 @@ App({
   },
 
   // 排序后取出数据
-  getInfoByOrder: function (setName, ruleItem, orderFuc,callback) {
+  getInfoByOrder: function (setName, ruleItem, orderFuc, callback) {
     const db = wx.cloud.database()
     db.collection(setName)
       .orderBy(ruleItem, orderFuc)
@@ -172,10 +224,10 @@ App({
   },
 
   // 删除集合中的数据
-  deleteInfoFromSet: function (setName,fruitId) {
+  deleteInfoFromSet: function (setName, fruitId) {
     const db = wx.cloud.database()
-      db.collection(setName).doc(fruitId).remove({
-      success: e=>{
+    db.collection(setName).doc(fruitId).remove({
+      success: e => {
         wx.showToast({
           title: '删除成功',
         })
@@ -186,7 +238,7 @@ App({
   },
 
   // 更新数据
-  updateInfo:function(setName,_id,updateInfoObj,callback){
+  updateInfo: function (setName, _id, updateInfoObj, callback) {
     const db = wx.cloud.database()
     db.collection(setName).doc(_id).update({
       data: updateInfoObj,
@@ -196,10 +248,10 @@ App({
   },
 
   // 选择本地图片上传至云端
-  selectImgUpToC: function (imgName,tmpUrlCallback) {
+  selectImgUpToC: function (imgName, tmpUrlCallback) {
     const self = this
     // 获取图片临时地址
-    new Promise((resolve,reject)=>{
+    new Promise((resolve, reject) => {
       wx.chooseImage({
         count: 1,
         sizeType: ['original', 'compressed'],
@@ -213,7 +265,7 @@ App({
   },
 
   // 上传图片到云端（云端文件夹，云端文件名，文件临时地址）
-  upToClound: (imgFolder, imgName, myFilePath,fileIDCallback) => {
+  upToClound: (imgFolder, imgName, myFilePath, fileIDCallback) => {
     wx.cloud.uploadFile({
       cloudPath: imgFolder + "/" + imgName, // 上传至云端的路径
       filePath: myFilePath, // 小程序临时文件路径
@@ -230,9 +282,9 @@ App({
   },
 
   // 获取云端文件tmpUrl
-  getTmpUrl: (imgFolder, imgName,currentData)=>{
+  getTmpUrl: (imgFolder, imgName, currentData) => {
     wx.cloud.getTempFileURL({
-      fileList: [getApp().globalData.cloudRoot+imgFolder + "/" + imgName],
+      fileList: [getApp().globalData.cloudRoot + imgFolder + "/" + imgName],
       success: res => {
         // console.log(res.fileList["0"].tempFileURL)
         getCurrentPages().setData({
