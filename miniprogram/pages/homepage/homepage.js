@@ -161,11 +161,10 @@ Page({
     that.setData({
       isShow: false
     })
-    // this.getOpenidAndUserInfo()
   },
 
   onReady: function () {
-    // console.log(getCurrentPages()["0"].data)
+    this.getOpenidAndUserInfo()
   },
 
   onShow: function () {

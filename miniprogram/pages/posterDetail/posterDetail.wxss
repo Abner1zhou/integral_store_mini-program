@@ -17,11 +17,11 @@
 }
 .internal{
   margin-top: 5%;
-  width: 90%;
-  margin-left: 5%;
+  width: 100%;
 }
 .Description{
   padding-bottom: 30rpx;
+  margin-left: 5%;
 }
 .imgDes{
   padding-bottom:80rpx;
@@ -40,8 +40,10 @@
 .margin-left{
   margin-left: 10%;
 }
-.position{
-}
+
+/* .position{
+} */
+
 .left{
   /* width: 70%;
   height: 50%;

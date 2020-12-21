@@ -5,10 +5,10 @@
     "pages/bgManage/bgManage",
     "pages/bgInfo/bgInfo",
     "pages/cart/cart",
-    "pages/me/me",
     "pages/detail/detail",
     "pages/address/address",
     "pages/orders/orders",
+    "pages/me/me",
     "pages/poster/poster",
     "pages/posterDetail/posterDetail"
   ],

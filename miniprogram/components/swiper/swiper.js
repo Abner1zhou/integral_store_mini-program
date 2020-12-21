@@ -21,10 +21,5 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    goToPoster: function(e) {
-      wx.navigateTo({
-        url: '../posterDetail/posterDetail?_id=' + e.currentTarget.dataset.fid, 
-      })
-    }
   }
 })

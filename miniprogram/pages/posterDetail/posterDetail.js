@@ -4,6 +4,7 @@
  */
 const db = wx.cloud.database()
 const app = getApp()
+
 Page({
 
   /**
@@ -22,7 +23,6 @@ Page({
       activity: JSON.parse(options.objData),
       date: date
     })
-    console.log(this.data.activity)
   },
 
   /**
@@ -78,14 +78,16 @@ Page({
     var _ = db.command
     wx.showModal({
       title: '提示',
-      content: '你确定要加入该团嘛',
+      content: '你确定要加入该活动吗？',
       success(res) {
         if (res.confirm) {
           console.log('用户点击确定')
           db.collection('activity').where({
             time: that.data.activity.time,
             member: _.in([app.globalData.openid])
-          }).get().then(res => {
+          })
+          .get()
+          .then(res => {
             if (res.data[0] != undefined) {
               wx.showToast({
                 title: '您已经加入了该活动',
@@ -97,7 +99,9 @@ Page({
               })
               db.collection('activity').where({
                 time: that.data.activity.time
-              }).get().then(res => {
+              })
+              .get()
+              .then(res => {
                 if (!res.data[0].member || (res.data[0].member.length < res.data[0].activity.peoples)) {
                   wx.cloud.callFunction({
                     name: 'where_update',
@@ -131,7 +135,7 @@ Page({
                   })
                 } else {
                   wx.showToast({
-                    title: '该团人已满',
+                    title: '该活动人数已满',
                     icon: 'none'
                   })
                 }

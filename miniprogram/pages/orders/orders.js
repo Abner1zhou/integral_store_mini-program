@@ -11,45 +11,43 @@ Page({
     // nonce_str: ''
   },
 
+  // 生命周期函数
   onReady() {
-    const self = this;
+    const that = this;
 
     // 32位随机字符串
     // var nonce_str = app.RndNum()
 
 
     // 获取总价和openid
-    self.setData({
+    that.setData({
       orders: app.globalData.carts,
       // nonce_str: nonce_str
     })
-    wx.getStorage({
-      key: 'openid',
-      success: res => {
-        self.setData({
-          openid: res.data
-        })
-      }
+    that.setData({
+      openid: app.globalData.openId
     })
     this.getTotalPrice();
   },
   // onReady↑
 
   onShow: function () {
-    const self = this;
-    wx.getStorage({
-      key: 'address',
-      success(res) {
-        if (res.data.name) {
-          self.setData({
-            address: res.data,
-            hasAddress: true
-          })
-        }
-        
-      }
-    })
+    this.getUserAddress();
   },
+
+    // 获取用户信息
+    getUserAddress() {
+      var that = this;
+      console.log(app.globalData.address.name)
+      var hasAddress = false;
+      if (app.globalData.address.name) {
+        this.hasAddress = true;
+    } 
+      that.setData({
+        hasAddress: this.hasAddress,
+        address: app.globalData.address
+      }) 
+    },
 
   /**
    * 计算总价

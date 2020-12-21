@@ -18,42 +18,72 @@ App({
       tmpNum: 0,
       tempFilePaths: "",
       admin: ["周世聪"],
-      openId: null,
+      openid: null,
       appid: 'wx0dd8c5c9ebe90a78',
       address: {
         name: '',
         phone: '',
         group: '',
         balance: 0
-      }
+      },
+      userInfo: null
     }
-    
-    // 启动小程序的时候直接获取openid
-    wx.cloud.callFunction({
-      name: 'add',
-      complete: res => {
-        console.log('云函数获取到的openid: ', res.result.openid);
-        var openid = res.result.openid;
-        this.globalData.openId = openid;
-        wx.setStorage({
-          data: this.globalData.openId,
-          key: 'openid',
-        })
-        this.getUserInfo()
+    // 获取用户信息
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+          wx.getUserInfo({
+            success: res => {
+              // 可以将 res 发送给后台解码出 unionId
+              this.globalData.userInfo = res.userInfo;
+              this.getUserOpenid()
+
+              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+              // 所以此处加入 callback 以防止这种情况
+              if (this.userInfoReadyCallback) {
+                this.userInfoReadyCallback(res)
+              }
+            }
+          })
+        }
+      },
+      fail: res => {
+        console.log(res);
+        console.log("没有登陆信息")
       }
     })
+    
+    // 启动小程序的时候直接获取openid
+    
 
 
 
   },
 
-  // 获取个人信息
-  getUserInfo() {
-    let that = this;
+  // 获取个人Openid 并获取个人信息
+  getUserOpenid() {
+    wx.cloud.callFunction({
+      name: 'add',
+      complete: res => {
+        console.log('云函数获取到的openid: ', res.result.openid);
+        var openid = res.result.openid;
+        this.globalData.openid = openid;
+        wx.setStorage({
+          data: this.globalData.openid,
+          key: 'openid',
+        })
+        this.getUserAddress()
+      }
+    });
+  },
+
+  getUserAddress() {
+    var that = this;
     wx.cloud.callFunction({
       name: 'userInfo',
       data: {
-        openid: that.globalData.openId
+        openid: that.globalData.openid
       },
       success: res => {
         if (res.result.data[0]) {
@@ -73,7 +103,6 @@ App({
           that.addRowToSet('customer_inf', tmp, e => {})
         }
         that.globalData.address = tmp
-
       }
     })
   },

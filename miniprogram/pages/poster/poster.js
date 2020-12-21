@@ -5,14 +5,47 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    userInfo: {},
+    logged: false,
+    openid: '',
+    exist: false,
+    activities: [],
+    teamName: '',
+    coin: 0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.setData({
+      activities: [
+        {
+          act_id: 0,
+          peoples: 10,
+          date: "2020-12-21",
+          clock: "12:30",
+          title: "长标题测试,长标题测试,长标题测试,长标题测试",
+          introduction: "测试ing.....测试ing.....测试ing.....测试ing.....测试ing.....测试ing.....",
+          coin: 100,
+          Expired: true,
+          creatorUrl: "cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/fruitSwiper/swiper_1.jpg"
+        },
+        {
+          act_id: 1,
+          peoples: 10,
+          date: "2020-12-24",
+          clock: "12:30",
+          title: "追“光”者",
+          introduction: "光盘行动",
+          coin: 10,
+          creator: "curry",
+          Expired: false,
+          creatorUrl: "cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/imgSwiper/学习礼包0.8853592971035031",
+          file_path: ["cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/imgSwiper/微信图片_20201221113721.jpg"],
+        }
+      ]
+    })
   },
 
   /**
@@ -62,5 +95,12 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  goDetail: function(e) {
+    var index = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: '../posterDetail/posterDetail?objData=' + JSON.stringify(this.data.activities[index]),
+    })
   }
 })
