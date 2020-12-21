@@ -137,10 +137,29 @@ Page({
         .catch(err => {
           console.log(err)
         })
+    } else if (!app.globalData.openid) {
+      wx.showModal({
+        title: 'Oh No',
+        content: '请先登陆',
+        success: res => {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '../me/me',
+            })
+          }
+        }
+      })
     } else {
       wx.showModal({
         title: 'Oh No',
         content: '请填写个人信息~',
+        success: res => {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '../address/address',
+            })
+          }
+        }
       })
     }
   }

@@ -6,10 +6,11 @@
         <view class='userUrl'>
           <image src='{{item.creatorUrl}}' style="width:100%; border-radius: 10%;" mode='widthFix'></image>
         </view>
-        <view class='userTitle'>活动标题：{{item.title}}</view>
+        <view class='userTitle'>活动标题：</view>
+        <view class='userTitleDetail'>{{item.title}}</view>
         <view class='userDate small_font'>活动日期：{{item.date}}</view>
         <view class='userClock small_font'>活动时间：{{item.clock}}</view>
-        <view class='userCoin small_font'>活动积分：{{item.coin}}</view>
+        <view class='userCoin small_font'>活动积分：{{item.coins}}</view>
         <view class='userDes' style='font-size:small;'>活动描述：{{item.introduction}}</view>
         <view class='photoArea' wx:if="{{item.file_path}}">
           <block wx:for="{{item.file_path}}" wx:key="index">
@@ -22,7 +23,7 @@
     </block>
   </scroll-view>
   <!-- 管理员的话显示添加活动标签 -->
-  <!-- <view class='plus' hover-class='plus-around'>
+  <view class='plus' hover-class='plus-around'>
     <image src='../../images/icon/plus+.png' mode='aspectFit' style='  width: 100rpx;  height: 100rpx;' bindtap='createActivity' ></image>
-  </view> -->
+  </view>
 </view>

@@ -11,6 +11,9 @@
   <view class='body'>
     <view class='internal'>
       <view class='Description'>
+        <text class="small_font">活动积分：{{activity.coins}}</text>
+      </view>
+      <view class='Description'>
         <text class="small_font">{{activity.introduction}}</text>
       </view>
       <view class='imgDes'>

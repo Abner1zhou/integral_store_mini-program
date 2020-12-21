@@ -1,7 +1,11 @@
 <view class="main">
     <view class="header">
         <!-- <image src="{{thumb}}" class="thumb"></image> -->
-        <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+        <view wx:if="{{!hasUserInfo && canIUse}}">
+            <image src="../../images/icon/Avatar.png" class="thumb"></image>
+            <button  open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取微信信息 </button>
+        </view>
+        
         <block wx:else>
             <view class="thumb">
             <open-data type="userAvatarUrl"></open-data>
