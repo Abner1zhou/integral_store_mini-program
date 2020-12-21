@@ -79,8 +79,8 @@ Page({
     // app.globalData.carts.push(newCartItem)
     app.isNotRepeteToCart(newCartItem)
     // console.log(app.globalData.carts) 
-    wx.switchTab({
-      url: '/pages/cart/cart',
+    wx.navigateTo({
+      url: "../orders/orders?totalPrice=" + that.data.fruitDetail.price,
     })
   },
 

@@ -14,42 +14,15 @@ Page({
     exist: false,
     activities: [],
     teamName: '',
-    coin: 0
+    coin: 0,
+    limit: 5
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // this.setData({
-    //   activities: [
-    //     {
-    //       act_id: 0,
-    //       peoples: 10,
-    //       date: "2020-12-21",
-    //       clock: "12:30",
-    //       title: "长标题测试,长标题测试,长标题测试,长标题测试",
-    //       introduction: "测试ing.....测试ing.....测试ing.....测试ing.....测试ing.....测试ing.....",
-    //       coin: 100,
-    //       Expired: true,
-    //       creatorUrl: "cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/fruitSwiper/swiper_1.jpg"
-    //     },
-    //     {
-    //       act_id: 1,
-    //       peoples: 10,
-    //       date: "2020-12-24",
-    //       clock: "12:30",
-    //       title: "追“光”者",
-    //       introduction: "光盘行动",
-    //       coin: 10,
-    //       creator: "curry",
-    //       Expired: false,
-    //       creatorUrl: "cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/imgSwiper/学习礼包0.8853592971035031",
-    //       file_path: ["cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/imgSwiper/微信图片_20201221113721.jpg"],
-    //     }
-    //   ]
-    // })
-    this.getActivities()
+    
   },
 
   /**
@@ -63,7 +36,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.getActivities();
   },
 
   /**
@@ -91,7 +64,16 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    wx.showLoading({
+      title: '加载中',
+    })
+    this.setData({
+      limit: this.data.limit + 5
+    });
+    this.getActivities();
+    wx.hideLoading({
+      success: (res) => {},
+    })
   },
 
   /**
@@ -119,7 +101,10 @@ Page({
 
   getActivities: function() {
     var that = this;
-    db.collection('activity').where({}).get({
+    db.collection('activity')
+    .orderBy('time', 'asc')
+    .limit(that.data.limit)
+    .get({
       success: res => {
         that.setData({
           activities: res.data
