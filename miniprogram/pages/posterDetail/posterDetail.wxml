@@ -2,22 +2,22 @@
   <view class='header'>
     <image class='userUrl' src='{{activity.creatorUrl}}' style='width:17%;height:120rpx;border-radius:10%;'></image>
     <view class='userRight'>
-      <text class='userName margin-left' style='font-size:30rpx; '>活动：{{activity.title}}\n</text>
+      <text class='userName margin-left' style='font-size:30rpx; '>活动：{{activity.activity.title}}\n</text>
       <text class='userName margin-left' style='font-size:30rpx; '>发起人：{{activity.creator}}\n</text>
-      <text class='small_font margin-left' style="color:#bbb">{{activity.date}}</text>
+      <text class='small_font margin-left' style="color:#bbb">{{activity.activity.date}}</text>
     </view>
   </view>
   <view class='sperate'></view>
   <view class='body'>
     <view class='internal'>
       <view class='Description'>
-        <text class="small_font">活动积分：{{activity.coins}}</text>
+        <text class="small_font">活动积分：{{activity.activity.coins}}</text>
       </view>
       <view class='Description'>
-        <text class="small_font">{{activity.introduction}}</text>
+        <text class="small_font">{{activity.activity.introduction}}</text>
       </view>
       <view class='imgDes'>
-        <block wx:for="{{activity.file_path}}" wx:key="index">
+        <block wx:for="{{activity.activity.file_path}}" wx:key="index">
           <image src='{{item}}' mode='widthFix' style="width:100%;"></image>
         </block>
       </view>

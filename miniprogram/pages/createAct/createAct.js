@@ -150,19 +150,7 @@ Page({
       var time = new Date()
       var second = new Date(e.detail.value.date + ' ' + e.detail.value.clock)
       var that = this
-      var object = {};
-      Object.assign(
-        object, 
-        e.detail.value, 
-        {
-        creator: app.globalData.address.name,
-        creatorUrl: app.globalData.userInfo.avatarUrl,
-        })
-      // var object = $.extend( e.detail.value, {
-      //   creator: app.globalData.address.name,
-      //   reatorUrl: app.globalData.userInfo.avatarUrl,
-      // })
-  
+      var object = e.detail.value;
       var file_path = new Array()
       //与创建团队的地方一样，活动主题与描述等都没有经过敏感字检查，小程序是有这个api的，等总体逻辑完成之后再加入
       that.mutiupload(file_path, that.data.files, 0, that.data.files.length, object.title, function(file_path) {

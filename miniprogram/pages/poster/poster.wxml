@@ -1,24 +1,25 @@
 <!--miniprogram/pages/poster/poster.wxml-->
 <view class='activities' >
   <scroll-view class='scroll'>
-    <block wx:for="{{activities}}" wx:key="act_id">
-      <view wx:if="{{!item.Expired}}" class='external' bindtap='goDetail' data-id="{{index}}" >
+    <block wx:for="{{activities}}" wx:key="_id">
+      <!-- 过期活动处理 -->
+      <view class='external' bindtap='goDetail' data-id="{{index}}" >
         <view class='userUrl'>
           <image src='{{item.creatorUrl}}' style="width:100%; border-radius: 10%;" mode='widthFix'></image>
         </view>
         <view class='userTitle'>活动标题：</view>
-        <view class='userTitleDetail'>{{item.title}}</view>
-        <view class='userDate small_font'>活动日期：{{item.date}}</view>
-        <view class='userClock small_font'>活动时间：{{item.clock}}</view>
-        <view class='userCoin small_font'>活动积分：{{item.coins}}</view>
-        <view class='userDes' style='font-size:small;'>活动描述：{{item.introduction}}</view>
-        <view class='photoArea' wx:if="{{item.file_path}}">
-          <block wx:for="{{item.file_path}}" wx:key="index">
+        <view class='userTitleDetail'>{{item.activity.title}}</view>
+        <view class='userDate small_font'>活动日期：{{item.activity.date}}</view>
+        <view class='userClock small_font'>活动时间：{{item.activity.clock}}</view>
+        <view class='userCoin small_font'>活动积分：{{item.activity.coins}}</view>
+        <view class='userDes' style='font-size:small;'>活动描述：{{item.activity.introduction}}</view>
+        <view class='photoArea' wx:if="{{item.activity.file_path}}">
+          <block wx:for="{{item.activity.file_path}}" wx:key="*this">
             <image src='{{item}}' class='userImages' mode='aspectFill' wx:if="{{index<3}}"></image>
             <view style='width:1%;height:100%;display:inline-block;'></view>
           </block>
         </view>
-        <view class='people small_font'>限人数：{{item.peoples}}</view>
+        <view class='people small_font'>限人数：{{item.activity.peoples}}</view>
       </view>
     </block>
   </scroll-view>

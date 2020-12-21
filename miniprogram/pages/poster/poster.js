@@ -121,10 +121,8 @@ Page({
     var that = this;
     db.collection('activity').where({}).get({
       success: res => {
-        console.log(res.data[0].activity)
         that.setData({
-          activities: [res.data[2].activity]
-          
+          activities: res.data
         })
       }
     })
