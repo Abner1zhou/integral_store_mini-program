@@ -165,7 +165,8 @@ Page({
             time: parseInt(time.getTime()),
             creator: app.globalData.address.name,
             creatorUrl: app.globalData.userInfo.avatarUrl,
-            second : second.getTime()
+            second : second.getTime(),
+            review: 0
           },
           success: res => {
             console.log(res)

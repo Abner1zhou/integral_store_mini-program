@@ -23,6 +23,9 @@
     <!-- 订单管理 -->
     <view class="bgInfo {{openid}}" bindtap='goToBgManage' hidden="{{!(isAdmin >= 0)}}">订单管理</view>
 
+    <!-- 活动管理 -->
+    <view class="bgInfo {{openid}}" bindtap='goToActManage' hidden="{{!(isAdmin >= 0)}}">活动管理</view>
+
     <!-- 个人信息管理 -->
     <view class="address-box">
         <view class="address-manage">

@@ -138,6 +138,12 @@ Page({
     wx.navigateTo({
       url: '/pages/bgManage/bgManage',
     })
+  },
+
+  goToActManage: function () {
+    wx.navigateTo({
+      url: '/pages/actManage/actManage',
+    })
   }
 
 })

@@ -11,7 +11,8 @@
     "pages/me/me",
     "pages/poster/poster",
     "pages/posterDetail/posterDetail",
-    "pages/createAct/createAct"
+    "pages/createAct/createAct",
+    "pages/actManage/actManage"
   ],
   "window": {
     "backgroundColor": "#F0F0F0",

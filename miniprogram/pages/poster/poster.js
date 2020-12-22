@@ -101,15 +101,16 @@ Page({
 
   getActivities: function() {
     var that = this;
-    db.collection('activity')
-    .orderBy('time', 'asc')
-    .limit(that.data.limit)
-    .get({
-      success: res => {
-        that.setData({
-          activities: res.data
-        })
-      }
+    wx.cloud.callFunction({
+      name: 'getActivities',
+      data: {
+        limit: that.data.limit
+      },
+    })
+    .then( res => {
+      that.setData({
+        activities: res.result.res.data
+      })
     })
   },
 })
