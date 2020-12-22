@@ -82,13 +82,15 @@ Page({
       success(res) {
         if (res.confirm) {
           console.log('用户点击确定')
-          db.collection('activity').where({
-            time: that.data.activity.time,
-            member: _.in([app.globalData.openid])
-          })
+          db.collection('activity').doc(that.data.activity._id)
           .get()
           .then(res => {
-            if (res.data[0] != undefined) {
+            if (res.data.members.length == res.data.activity.peoples) {
+              wx.showToast({
+                title: '该活动人数已满',
+                icon: 'none'
+              })
+            } else if (res.data.members.includes(app.globalData.address.name)) {
               wx.showToast({
                 title: '您已经加入了该活动',
                 icon: 'none'
@@ -97,49 +99,26 @@ Page({
               wx.showToast({
                 title: '成功加入',
               })
-              db.collection('activity').where({
-                time: that.data.activity.time
-              })
+              db.collection('activity').doc(that.data.activity._id)
               .get()
               .then(res => {
-                if (!res.data[0].member || (res.data[0].member.length < res.data[0].activity.peoples)) {
-                  wx.cloud.callFunction({
-                    name: 'where_update',
-                    data: {
-                      collection: 'activity',
-                      key: 'time',
-                      value: that.data.activity.time,
-                      add_key: 'member',
-                      add_value: app.globalData.openid,
-                      method: 'push',
-                    }
-                  }).then(res => {
-                    //这里需要重新获取下活动才能同步member
-                    db.collection('activity').where({
-                      time: that.data.activity.time
-                    }).get().then(res => {
-                      wx.cloud.callFunction({
-                        name: 'where_update',
-                        data: {
-                          collection: 'users',
-                          key: '_openid',
-                          value: app.globalData.openid,
-                          add_key: 'activities',
-                          add_value: res.data[0], //这里是直接获取从上个页面传过来的活动，而不是直接从数据库获取的，
-                          method: 'push',
-                        }
-                      }).then(res => {
-
-                      })
+                db.collection('activity')
+                .doc(that.data.activity._id)
+                .update({
+                  data: {
+                    members: db.command.push(app.globalData.address.name)
+                  }
+                })
+                .then( () => {
+                  db.collection('activity')
+                  .doc(that.data.activity._id)
+                  .get()
+                  .then( res => {
+                    that.setData({
+                      activity: res.data
                     })
                   })
-                } else {
-                  wx.showToast({
-                    title: '该活动人数已满',
-                    icon: 'none'
-                  })
-                }
-
+                })
               })
             }
           })
@@ -150,6 +129,8 @@ Page({
       }
     })
   },
+
+  // 没有使用   留言
   sendMsg: function(e) {
     wx.showToast({
       title: '留言成功！',

@@ -11,10 +11,12 @@ exports.main = async (event, context) => {
   const today = new Date();
   var review = 1;  // 0：待审核   1：审核通过   2：拒绝
   var second = _.gt(today.getTime());
+  var sortBy = 'asc'
   // 筛选所有活动，待审核活动
   if (event.all) {
     review= {};
     second = {};
+    sortBy = 'desc';
   } else if (event.review == 0) {
     review= 0;
   } else if (event.review == 1) {
@@ -26,7 +28,7 @@ exports.main = async (event, context) => {
                       second: second,
                       review: review
                     })
-                    .orderBy('second', 'asc')
+                    .orderBy('second', sortBy)
                     .limit(event.limit)
                     .get()
   console.log(res)

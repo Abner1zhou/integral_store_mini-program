@@ -24,22 +24,19 @@
     </view>
   </view>
   <view class='sperate' style='padding-top:50rpx;width:100%;margin:0;'></view>
-  <!-- <view class='internal' style='margin-top:2%;'>
-    <text class='small_font'>留言</text>
+  <view class='internal' style='margin-top:2%;'>
+    <text class='small_font'>报名名单：</text>
     <view class='sperate'></view>
     <view class='comments small_font'>
-      <block wx:for="{{activity.comments}}" wx:key="{{index}}">
-        <view class='comment'>
-          <text>{{item[2]}}回复{{item[1]}}:{{item[0]}}\n</text>
-        </view>
+      <text>{{activity.creator}}</text>
+      <block wx:for="{{activity.members}}" wx:key="index">
+        <text>、{{item}}</text>
       </block>
     </view>
-  </view> -->
+  </view>
 </view>
 <view class="bottom">
   <view class="left">
-    <!-- <image src='../../images/liuyan.png' style='width:9%;height:60rpx;'></image> -->
-    <input style='border-bottom:1rpx solid #bbb; width:50%;line-height:60rpx;padding-bottom:10rpx;' bindconfirm='sendMsg' confirm-type='send' type='text'></input>
     <button class='minibtn' style=' width:30%;line-height:60rpx; background-color:rgb(252,118,106);color:white;' bindtap='join'>加入</button>
   </view>
 </view>

@@ -19,7 +19,7 @@
           <view>日期：{{item.activity.date + "  " + item.activity.clock}}</view>
           <view>奖励积分：{{item.activity.coins}}</view>
           <view>活动描述：{{item.activity.introduction}}</view>
-          <view>下单时间：{{item.second}}</view>
+          <view>发布日期：{{item.time}}</view>
         </view>
 
         <view class='Btns'>
@@ -46,7 +46,7 @@
         <view>日期：{{item.activity.date + "  " + item.activity.clock}}</view>
         <view>奖励积分：{{item.activity.coins}}</view>
         <view>活动描述：{{item.activity.introduction}}</view>
-        <view>下单时间：{{item.second}}</view>
+        <view>发布日期：{{item.time}}</view>
       </view>
 
       <view class='Btns'>
@@ -74,7 +74,7 @@
       <view>日期：{{item.activity.date + "  " + item.activity.clock}}</view>
       <view>奖励积分：{{item.activity.coins}}</view>
       <view>活动描述：{{item.activity.introduction}}</view>
-      <view>下单时间：{{item.second}}</view>
+      <view>发布日期：{{item.time}}</view>
     </view>
 
   </view>

@@ -147,8 +147,8 @@ Page({
         })
         pre.onLoad()
       }, 1500)
-      var time = new Date()
-      var second = new Date(e.detail.value.date + ' ' + e.detail.value.clock)
+      var time = new Date() // 活动发布日期
+      var second = new Date(e.detail.value.date + ' ' + e.detail.value.clock)   // 活动开始日期
       var that = this
       var object = e.detail.value;
       var file_path = new Array()
