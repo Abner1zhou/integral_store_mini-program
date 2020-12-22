@@ -41,7 +41,7 @@
           </view>
           <!-- 购物车 -->
           <!-- <view class='like-image' catchtap="addCartByHome" data-_id="{{item._id}}"> -->
-          <image src='../../images/icon/cart4.png' mode='aspectFit' catchtap="addCartByHome" data-_id="{{item._id}}"></image>
+          <!-- <image src='../../images/icon/cart4.png' mode='aspectFit' catchtap="addCartByHome" data-_id="{{item._id}}"></image> -->
           <!-- </view> -->
           <!-- 销量 -->
           <!-- <view class='like-num'>添加</view>  -->

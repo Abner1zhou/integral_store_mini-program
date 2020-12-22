@@ -11,9 +11,6 @@ exports.main = async (event, context) => {
   .update({
     data: {
       review: event.review
-    },
-    success: function(res) {
-      console.log(res.data)
     }
   })
 

@@ -51,39 +51,7 @@
 
   <!-- 底部导航 -->
   <view class='detail-nav'>
-    <!-- 购物车 -->
-    <view class='cart' bindtap='goToCart'>
-      <image src="../../images/icon/cart3.png" mode='scaleToFill'></image>
-      <view>购物车</view>
-    </view>
-    <view class='addToCart' bindtap='addToCart'>加入购物车</view>
-    <view class='buy' bindtap='toBuy'>立即购买</view>
-  </view>
-
-  <!-- 购物车/购买弹窗 -->
-  <view class='popUpWindow' hidden="{{popUpHidden}}">
-    <view class='popUpMask'>
-      <view class='popCard'>
-        <!-- 取消按钮 -->
-        <view style='width:700rpx;' bindtap='popCancel'>
-          <icon type="cancel" size="20" color='grey' style='float:right'/>
-        </view>
-        <!-- 名字 -->
-        <view class='popName'>{{fruitDetail.name}}</view>
-        <!-- 价格 -->
-        <view class='popPrice'>￥{{fruitDetail.price}}</view>
-        <!-- 购买数量 -->
-        <view class='popCount'>
-          <view class='word'>购买数量</view>
-          <view class='plusMinus'>
-            <view class='minus' bindtap='minusCount'>-</view>
-            <view class='count'>{{popCartCount}}</view>
-            <view class='plus' bindtap='plusCount'>+</view>
-          </view>
-        </view>
-        <!-- 按钮 -->
-        <view class='popButton' bindtap='toCart'>加入购物车</view>
-      </view>
-    </view>
+    <view class='buy' bindtap='toBuy'>立即兑换</view>
   </view>
 </view>
+
