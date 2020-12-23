@@ -166,7 +166,8 @@ Page({
             creator: app.globalData.address.name,
             creatorUrl: app.globalData.userInfo.avatarUrl,
             second : second.getTime(),
-            review: 0
+            review: 0,
+            members_openid: []
           },
           success: res => {
             console.log(res)

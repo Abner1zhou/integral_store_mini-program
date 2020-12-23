@@ -50,9 +50,6 @@ Page({
       })
     }
     
-    this.getOpenidAndOrders();
-    this.getActivities();
-    
   },
 
   onShow() {
@@ -62,6 +59,8 @@ Page({
      * 获取本地缓存 地址信息
      */
     this.getUserAddress();
+    this.getOpenidAndOrders();
+    this.getActivities();
   },
 
   // 获取用户信息
@@ -174,6 +173,20 @@ Page({
     wx.navigateTo({
       url: '../posterDetail/posterDetail?objData=' + JSON.stringify(this.data.actList[index]),
     })
+  },
+
+  addActLimit: function () {
+    this.setData({
+      activitiesLimit: this.data.activitiesLimit + 3
+    })
+    this.getActivities();
+  },
+
+  addGoodsLimit: function () {
+    this.setData({
+      goodsLimit: this.data.goodsLimit + 3
+    })
+    this.getOpenidAndOrders();
   },
 
 })

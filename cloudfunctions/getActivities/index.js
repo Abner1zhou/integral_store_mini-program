@@ -9,30 +9,37 @@ exports.main = async (event, context) => {
   const db = cloud.database();
   const _ = db.command;
   const today = new Date();
-  var review = 1;  // 0：待审核   1：审核通过   2：拒绝
-  var second = _.gt(today.getTime());
+  var checkList = {
+    review: 1,
+    second: _.gt(today.getTime()),
+  }
   var sortBy = 'asc'
-  var mem_openid = {}
   // 筛选所有活动，待审核活动
   if (event.openid) {
-    mem_openid = _.in([event.openid]);
+    checkList = {
+      review: 1,
+      second: _.gt(today.getTime()),
+      members_openid: _.in([event.openid])
+    }
   }
   if (event.all) {
-    review= {};
-    second = {};
+    checkList = {
+    }
     sortBy = 'desc';
   } else if (event.review == 0) {
-    review= 0;
+    checkList = {
+      review: 0,
+      second: _.gt(today.getTime()),
+    }
   } else if (event.review == 1) {
-    review= 1;
+    checkList = {
+      review: 1,
+      second: _.gt(today.getTime()),
+    }
   }
   // 从数据库中获得未过期的活动，并按时间排列
   let res = await db.collection('activity')
-                    .where({
-                      second: second,
-                      review: review,
-                      members_openid: mem_openid
-                    })
+                    .where(checkList)
                     .orderBy('second', sortBy)
                     .limit(event.limit)
                     .get()

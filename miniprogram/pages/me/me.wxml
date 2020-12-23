@@ -56,7 +56,7 @@
             </view>
         </view>
         
-        <view class="orders-more" >
+        <view class="orders-more" bindtap='addGoodsLimit'>
             查看更多
         </view>
     </view>
@@ -71,7 +71,7 @@
             <view class="orders-number" >奖励积分：{{item.activity.coins}}</view>
         </view>
         </view>
-        <view class="orders-more" >
+        <view class="orders-more" bindtap='addActLimit' >
             查看更多
         </view>
     </view>
