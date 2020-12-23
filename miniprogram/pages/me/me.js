@@ -166,6 +166,14 @@ Page({
     wx.navigateTo({
       url: '/pages/actManage/actManage',
     })
-  }
+  },
+
+  goToDetail: function(e) {
+    console.log(e)
+    var index = parseInt(e.currentTarget.id)
+    wx.navigateTo({
+      url: '../posterDetail/posterDetail?objData=' + JSON.stringify(this.data.actList[index]),
+    })
+  },
 
 })

@@ -18,63 +18,64 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     let date = new Date(JSON.parse(options.objData).time).toLocaleDateString()
     this.setData({
       activity: JSON.parse(options.objData),
       date: date
     })
+    this.getMembers();
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
+  onReady: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
+  onUnload: function () {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   },
-  join: function() {
+  join: function () {
     var that = this
     var _ = db.command
     if (app.globalData.openid == undefined) {
@@ -102,82 +103,119 @@ Page({
         }
       })
     } else {
-    wx.showModal({
-      title: '提示',
-      content: '你确定要加入该活动吗？',
-      success(res) {
-        if (res.confirm) {
-          console.log('用户点击确定')
-          db.collection('activity').doc(that.data.activity._id)
-          .get()
-          .then(res => {
-            if (res.data.members.length == res.data.activity.peoples) {
-              wx.showToast({
-                title: '该活动人数已满',
-                icon: 'none'
-              })
-            } else if (res.data.members.includes(app.globalData.address.name) || res.data.members_openid.includes(app.globalData.openid)) {
-              wx.showToast({
-                title: '您已经加入了该活动',
-                icon: 'none'
-              })
-            } else {
-              wx.showToast({
-                title: '成功加入',
-              })
-              db.collection('activity').doc(that.data.activity._id)
+      wx.showModal({
+        title: '提示',
+        content: '你确定要加入该活动吗？',
+        success(res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+            db.collection('activity').doc(that.data.activity._id)
               .get()
               .then(res => {
-                db.collection('activity')
-                .doc(that.data.activity._id)
-                .update({
-                  data: {
-                    members: db.command.push(app.globalData.address.name),
-                    members_openid: db.command.push(app.globalData.openid)
-                  }
-                })
-                .then( () => {
-                  db.collection('activity')
-                  .doc(that.data.activity._id)
-                  .get()
-                  .then( res => {
-                    that.setData({
-                      activity: res.data
-                    })
+                if (res.data.members_openid.length == res.data.activity.peoples) {
+                  wx.showToast({
+                    title: '该活动人数已满',
+                    icon: 'none'
                   })
-                })
+                } else if (res.data.members_openid.includes(app.globalData.openid)) {
+                  wx.showToast({
+                    title: '您已经加入了该活动',
+                    icon: 'none'
+                  })
+                } else {
+                  wx.showToast({
+                    title: '成功加入',
+                  })
+                  db.collection('activity').doc(that.data.activity._id)
+                    .get()
+                    .then(res => {
+                      db.collection('activity')
+                        .doc(that.data.activity._id)
+                        .update({
+                          data: {
+                            members_openid: db.command.push(app.globalData.openid)
+                          }
+                        })
+                        .then(() => {
+                          db.collection('activity')
+                            .doc(that.data.activity._id)
+                            .get()
+                            .then(res => {
+                              that.setData({
+                                activity: res.data
+                              })
+                              that.getMembers();
+                            })
+                        })
+                    })
+                }
               })
-            }
-          })
 
-        } else if (res.cancel) {
-          console.log('用户点击取消')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
         }
-      }
-    })
-  }
+      })
+    }
   },
 
   // 退出活动
-  quitActivity: function(e) {
+  quitActivity: function (e) {
+    var that = this;
+    wx.showModal({
+      title: '提示',
+      content: '你确定要退出该活动吗？',
+      success: res => {
+        if (res.confirm) {
+          wx.cloud.callFunction({
+            name: 'updateActivities',
+            data: {
+              id: that.data.activity._id,
+              quit: true,
+              openid: app.globalData.openid
+            }
+          })
+          .then( res => {
+            that.setData({
+              activity: res.result,
+              joined: false
+            })
+            that.getMembers();
+          })
+        }
+        
+      }
+    })
 
   },
 
   // 获取已报名人员名单
-  getMembers: function(e) {
+  getMembers: function () {
     var that = this;
-    db.collection('activity').doc(that.data.activity._id)
-          .get()
-          .then( res => {
-            that.setData({
-              members_openid: res.data.members_openid
-            })
+
+    wx.cloud.callFunction({
+      name: 'getUserName',
+      data: {
+        openid: that.data.activity.members_openid
+      },
+      success: res => {
+        // console.log(res.result)
+        that.setData({
+          members: res.result.nameList
+        })
+        if (that.data.activity.members_openid.includes(app.globalData.openid)) {
+          that.setData({
+            joined: true
           })
+        }
+      }
+    })
+
   },
 
 
   // 没有使用   留言
-  sendMsg: function(e) {
+  sendMsg: function (e) {
     wx.showToast({
       title: '留言成功！',
     })

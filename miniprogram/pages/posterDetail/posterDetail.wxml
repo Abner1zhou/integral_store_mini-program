@@ -29,7 +29,7 @@
     <view class='sperate'></view>
     <view class='comments small_font'>
       <text>{{activity.creator}}</text>
-      <block wx:for="{{activity.members}}" wx:key="index">
+      <block wx:for="{{members}}" wx:key="index">
         <text>、{{item}}</text>
       </block>
     </view>
@@ -38,5 +38,6 @@
 <view class="bottom">
   <view class="left">
     <button class='minibtn' style=' width:30%;line-height:60rpx; background-color:rgb(252,118,106);color:white;' bindtap='join' hidden="{{joined}}">加入</button>
+    <button class='minibtn' style=' width:30%;line-height:60rpx; background-color:rgb(252,118,106);color:white;' bindtap='quitActivity' hidden="{{!joined}}">取消报名</button>
   </view>
 </view>

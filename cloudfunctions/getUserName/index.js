@@ -10,19 +10,17 @@ const _ = db.command;
 exports.main = async (event, context) => {
   var nameList = [];
   for ( var index in event.openid) {
-    db.collection('customer_inf').where({
+    await db.collection('customer_inf').where({
       _openid: event.openid[index]
     }).get()
     .then(res => {
-          console.log(res)
           nameList.push(res.data[0].name)
         }
     )
   }
-  nameList.reverse();
   
-
+  console.log(nameList)
   return {
-    nameList
+    nameList,
   }
 }
