@@ -12,7 +12,11 @@ exports.main = async (event, context) => {
   var review = 1;  // 0：待审核   1：审核通过   2：拒绝
   var second = _.gt(today.getTime());
   var sortBy = 'asc'
+  var mem_openid = {}
   // 筛选所有活动，待审核活动
+  if (event.openid) {
+    mem_openid = _.in([event.openid]);
+  }
   if (event.all) {
     review= {};
     second = {};
@@ -26,7 +30,8 @@ exports.main = async (event, context) => {
   let res = await db.collection('activity')
                     .where({
                       second: second,
-                      review: review
+                      review: review,
+                      members_openid: mem_openid
                     })
                     .orderBy('second', sortBy)
                     .limit(event.limit)

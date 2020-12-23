@@ -55,5 +55,22 @@
                 <text>实付：￥{{item.total}}</text>
             </view>
         </view>
+        
+        <view class="orders-more" >
+            查看更多
+        </view>
+    </view>
+    <!-- 活动列表 -->
+    <view class="orders-box">
+        <view class="orders">已报名的活动</view>
+        <view class="orders-list" wx:for="{{actList}}" wx:key="index">
+            <view class="orders-number" >标题：{{item.activity.title}}</view>
+            <view class="orders-number" >日期：{{item.activity.date + "  " + item.activity.clock}}</view>
+            <view class="orders-number" >奖励积分：{{item.activity.coins}}</view>
+
+        </view>
+        <view class="orders-more" >
+            查看更多
+        </view>
     </view>
 </view>

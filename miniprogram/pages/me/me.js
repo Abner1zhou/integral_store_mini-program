@@ -5,12 +5,15 @@ const db = wx.cloud.database();
 Page({
   data: {
     orders: [],
+    actList: [],
     hasAddress: false,
     address: {},
     isAdmin: -1,
     openid: '',
     userInfo: {},
     hasUserInfo: false,
+    goodsLimit: 3,
+    activitiesLimit: 3,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     // 管理员openID
     adiminArr: [
@@ -47,7 +50,9 @@ Page({
       })
     }
     
-    that.getOpenidAndOrders();
+    this.getOpenidAndOrders();
+    this.getActivities();
+    
   },
 
   onShow() {
@@ -75,7 +80,6 @@ Page({
 
   getUserInfo: function(e) {
     var that = this;
-    console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
@@ -91,12 +95,13 @@ Page({
   onPullDownRefresh: function () {
     this.getOpenidAndOrders();
     this.getUserAddress();
+    this.getActivities();
     setTimeout(function () {
       wx.stopPullDownRefresh()
     }, 500);
   },
 
-  // 获取用户openid
+  // 获取用户openid。 订单信息、活动信息
   getOpenidAndOrders() {
     var that = this;
     var openid = wx.getStorage({
@@ -109,7 +114,7 @@ Page({
         db.collection('order_master')
         .where({
           _openid: that.data.openid
-        })
+        }).limit(that.data.goodsLimit)
         .get()
         .then(
           e=>{
@@ -123,6 +128,23 @@ Page({
             })
           })
       }
+    })
+  },
+
+  // 获取活动列表
+  getActivities: function() {
+    var that = this;
+    wx.cloud.callFunction({
+      name: 'getActivities',
+      data: {
+        limit: that.data.activitiesLimit,
+        openid: app.globalData.openid
+      },
+    })
+    .then( res => {
+      that.setData({
+        actList: res.result.res.data
+      })
     })
   },
 

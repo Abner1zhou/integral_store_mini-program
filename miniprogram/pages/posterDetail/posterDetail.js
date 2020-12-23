@@ -11,7 +11,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    date: ''
+    date: '',
+    joined: false
   },
 
   /**
@@ -76,6 +77,31 @@ Page({
   join: function() {
     var that = this
     var _ = db.command
+    if (app.globalData.openid == undefined) {
+      wx.showModal({
+        title: '请先登陆',
+        cancelColor: 'cancelColor',
+        success: res => {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '../me/me',
+            })
+          }
+        }
+      })
+    } else if (app.globalData.address.name == '') {
+      wx.showModal({
+        title: '请先完善个人信息',
+        cancelColor: 'cancelColor',
+        success: res => {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '../address/address',
+            })
+          }
+        }
+      })
+    } else {
     wx.showModal({
       title: '提示',
       content: '你确定要加入该活动吗？',
@@ -90,7 +116,7 @@ Page({
                 title: '该活动人数已满',
                 icon: 'none'
               })
-            } else if (res.data.members.includes(app.globalData.address.name)) {
+            } else if (res.data.members.includes(app.globalData.address.name) || res.data.members_openid.includes(app.globalData.openid)) {
               wx.showToast({
                 title: '您已经加入了该活动',
                 icon: 'none'
@@ -106,7 +132,8 @@ Page({
                 .doc(that.data.activity._id)
                 .update({
                   data: {
-                    members: db.command.push(app.globalData.address.name)
+                    members: db.command.push(app.globalData.address.name),
+                    members_openid: db.command.push(app.globalData.openid)
                   }
                 })
                 .then( () => {
@@ -128,7 +155,26 @@ Page({
         }
       }
     })
+  }
   },
+
+  // 退出活动
+  quitActivity: function(e) {
+
+  },
+
+  // 获取已报名人员名单
+  getMembers: function(e) {
+    var that = this;
+    db.collection('activity').doc(that.data.activity._id)
+          .get()
+          .then( res => {
+            that.setData({
+              members_openid: res.data.members_openid
+            })
+          })
+  },
+
 
   // 没有使用   留言
   sendMsg: function(e) {
