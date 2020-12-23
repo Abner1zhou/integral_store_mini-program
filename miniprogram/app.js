@@ -1,7 +1,7 @@
 //app.js
 App({
   onLaunch: function () {
-
+    const scene_info = wx.getLaunchOptionsSync();
     if (!wx.cloud) {
       console.error('请使用 2.12.3 或以上的基础库以使用云能力')
     } else {
@@ -54,7 +54,15 @@ App({
       }
     })
     
-    // 启动小程序的时候直接获取openid
+    // 二维码扫描……签到
+
+    
+    // console.log(scene_info)
+    // if (scene_info.path == "pages/actCheckin/actCheckin") {
+    //   wx.navigateTo({
+    //     url: '/pages/actCheckin/actCheckin?objData=' + JSON.stringify(scene_info.query.scene),
+    //   })
+    // }
     
 
 

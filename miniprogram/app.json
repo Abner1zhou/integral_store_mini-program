@@ -12,7 +12,8 @@
     "pages/poster/poster",
     "pages/posterDetail/posterDetail",
     "pages/createAct/createAct",
-    "pages/actManage/actManage"
+    "pages/actManage/actManage",
+    "pages/actCheckin/actCheckin"
   ],
   "window": {
     "backgroundColor": "#F0F0F0",

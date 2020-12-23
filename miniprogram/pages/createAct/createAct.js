@@ -154,11 +154,11 @@ Page({
       var file_path = new Array()
       //与创建团队的地方一样，活动主题与描述等都没有经过敏感字检查，小程序是有这个api的，等总体逻辑完成之后再加入
       that.mutiupload(file_path, that.data.files, 0, that.data.files.length, object.title, function(file_path) {
-        console.log(file_path)
+        // console.log(file_path)
         object.file_path = file_path
-        console.log(object)
+        // console.log(object)
         object.peoples = parseInt(object.peoples)
-        console.log(object.file_path)
+        // console.log(object.file_path)
         db.collection('activity').add({
           data: {
             activity: object,

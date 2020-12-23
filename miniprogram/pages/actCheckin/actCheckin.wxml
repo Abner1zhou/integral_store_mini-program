@@ -1,0 +1,4 @@
+<!--miniprogram/pages/actCheckin/actCheckin.wxml-->
+<view>
+<button>签到</button>
+</view>

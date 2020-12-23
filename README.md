@@ -33,7 +33,6 @@ git clone https://gitee.com/its_onion/integral_store_mini-program.git
 
 ### 待完成功能
 
-- 活动发布
 - 活动签到
 - 积分导入
 
@@ -45,6 +44,11 @@ git clone https://gitee.com/its_onion/integral_store_mini-program.git
   > 原来是一个水果商店的小程序，我在上面做的修改
   >
   > 目前已经完成了基本的积分兑换流程，但是积分需要后台手动维护。接下来会完成积分的导入。
+  >
+- v0.5.0 积分商城初步完成
+  > 活动模块已经完成，可以发布活动、审批、加入活动
+  >
+  > 已经满足一期需求，后期计划把二维码签到做一下
 
 
 

@@ -12,7 +12,8 @@ Page({
    */
   data: {
     date: '',
-    joined: false
+    joined: false,
+    isCreator: false
   },
 
   /**
@@ -24,6 +25,11 @@ Page({
       activity: JSON.parse(options.objData),
       date: date
     })
+    if (this.data.activity._openid == app.globalData.openid) {
+      this.setData({
+        isCreator: true
+      })
+    }
     this.getMembers();
   },
 
@@ -210,7 +216,16 @@ Page({
         }
       }
     })
+  },
 
+  // 获取签到二维码
+  getCheckinQRCode: function() {
+    wx.callFunction({
+      name: 'actGetQRCode',
+      data: {
+        activityInfo: this.data.activity,
+      }
+    })
   },
 
 
