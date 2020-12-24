@@ -28,9 +28,8 @@
     <text class='small_font'>报名名单：</text>
     <view class='sperate'></view>
     <view class='comments small_font'>
-      <text>{{activity.creator}}</text>
       <block wx:for="{{members}}" wx:key="index">
-        <text>、{{item}}</text>
+        <text>{{item}}  </text>
       </block>
     </view>
   </view>

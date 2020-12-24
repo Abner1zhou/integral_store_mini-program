@@ -226,6 +226,11 @@ Page({
         activityInfo: this.data.activity,
       }
     })
+    .then( res => {
+      wx.previewImage({
+        urls: ['cloud://pig-1-2gykytc24ac43904.7069-pig-1-2gykytc24ac43904-1304113058/' + res.result],
+      })
+    })
   },
 
 

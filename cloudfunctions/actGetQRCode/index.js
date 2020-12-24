@@ -16,7 +16,7 @@ exports.main = async (event, context) => {
         cloudPath: 'activity_images/' + title + 'QRCode' + '.jpg',
         fileContent: result.buffer
     })
-    // return result
+    return ('activity_images/' + title + 'QRCode' + '.jpg')
   } catch (err) {
     return err
   }
