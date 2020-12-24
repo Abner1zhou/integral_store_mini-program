@@ -1,5 +1,6 @@
 // miniprogram/pages/bgInfo/bgInfo.js
 const app = getApp()
+const db = wx.cloud.database();
 
 Page({
 
@@ -219,9 +220,15 @@ Page({
 
   // 删除水果
   deleteFruit: function() {
-    // app.deleteInfoFromSet('fruit-board',"葡萄")
     var that = this
-    console.log(that.data.delFruitId)
+    db.collection('fruit-board').doc(that.data.delFruitId)
+      .get()
+      .then( res => {
+        wx.cloud.deleteFile({
+          fileList: res.data.tmpUrlArr
+        })
+      })
+    
     new Promise((resolve,reject)=>{
       app.deleteInfoFromSet('fruit-board', that.data.delFruitId)
     })

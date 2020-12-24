@@ -220,7 +220,7 @@ Page({
 
   // 获取签到二维码
   getCheckinQRCode: function() {
-    wx.callFunction({
+    wx.cloud.callFunction({
       name: 'actGetQRCode',
       data: {
         activityInfo: this.data.activity,

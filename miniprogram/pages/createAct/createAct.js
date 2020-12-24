@@ -158,6 +158,7 @@ Page({
         object.file_path = file_path
         // console.log(object)
         object.peoples = parseInt(object.peoples)
+        object.coins = parseInt(object.coins)
         // console.log(object.file_path)
         db.collection('activity').add({
           data: {
@@ -167,7 +168,9 @@ Page({
             creatorUrl: app.globalData.userInfo.avatarUrl,
             second : second.getTime(),
             review: 0,
-            members_openid: []
+            members_openid: [],
+            checkinCodeFilePath: '',
+            checkinList: []
           },
           success: res => {
             console.log(res)

@@ -27,7 +27,7 @@
     <view class="bgInfo {{openid}}" bindtap='goToActManage' hidden="{{!(isAdmin >= 0)}}">活动管理</view>
 
     <!-- 个人信息管理 -->
-    <view class="address-box">
+    <view class="address-box" hidden="{{!openid}}">
         <view class="address-manage">
             <navigator url="/pages/address/address">个人信息管理</navigator>
         </view>
@@ -39,7 +39,7 @@
     </view>
 
     <!-- 我的订单 -->
-    <view class="orders-box">
+    <view class="orders-box" hidden="{{!openid}}">
         <view class="orders">我的订单</view>
         <view class="orders-list" wx:for="{{orders}}" wx:key="index">
             <view class="orders-number" wx:if="{{item.orderSuccess && !item.finished}}">订单状态：已支付</view>
@@ -62,7 +62,7 @@
     </view>
 
     <!-- 活动列表 -->
-    <view class="orders-box">
+    <view class="orders-box" hidden="{{!openid}}">
         <view class="orders">已报名的活动</view>
         <view class="orders-list" wx:for="{{actList}}" wx:key="index">
         <view bindtap='goToDetail' id='{{index}}'>

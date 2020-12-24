@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    activity: {}
   },
 
   /**
@@ -20,7 +20,10 @@ Page({
       .doc(activityID)
       .get()
       .then(res => {
-        console.log(res)
+        console.log(res.data)
+        this.setData({
+          activity: res.data
+        })
       })
   },
 
@@ -71,5 +74,29 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  checkin: function () {
+    wx.cloud.callFunction({
+        name: 'actCheckin',
+        data: {
+          id: this.data.activity._id,
+          openid: app.globalData.openid,
+          coins: this.data.activity.activity.coins
+        }
+      })
+      .then(() => {
+        wx.showToast({
+          title: '签到成功~',
+        })
+      })
+      .catch(err => {
+        if (err.errMsg.includes("已报名")) {
+          wx.showToast({
+            icon: 'none',
+            title: '您已经签到啦~',
+          })
+        }
+      })
   }
 })

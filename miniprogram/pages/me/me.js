@@ -137,7 +137,7 @@ Page({
       name: 'getActivities',
       data: {
         limit: that.data.activitiesLimit,
-        openid: app.globalData.openid
+        openid: that.data.openid
       },
     })
     .then( res => {

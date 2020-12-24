@@ -1,4 +1,24 @@
 <!--miniprogram/pages/actCheckin/actCheckin.wxml-->
 <view>
-<button>签到</button>
+  <view class='external' bindtap='goDetail'>
+    <view class='userUrl'>
+      <image src='{{activity.creatorUrl}}' style="width:100%; border-radius: 10%;" mode='widthFix'></image>
+    </view>
+    <view class='userTitle'>活动标题：</view>
+    <view class='userTitleDetail'>{{activity.activity.title}}</view>
+    <view class='userDate small_font'>活动日期：{{activity.activity.date}}</view>
+    <view class='userClock small_font'>活动时间：{{activity.activity.clock}}</view>
+    <view class='userCoin small_font'>活动积分：{{activity.activity.coins}}</view>
+    <view class='userDes' style='font-size:small;'>活动描述：{{activity.activity.introduction}}</view>
+    <view class='photoArea' wx:if="{{activity.activity.file_path}}">
+      <block wx:for="{{activity.activity.file_path}}" wx:key="*this">
+        <image src='{{item}}' class='userImages' mode='aspectFill' wx:if="{{index<3}}"></image>
+        <view style='width:1%;height:100%;display:inline-block;'></view>
+      </block>
+    </view>
+    <view class='people small_font'>限人数：{{activity.activity.peoples}}</view>
+  </view>
+</view>
+<view>
+  <button bindtap="checkin">签到</button>
 </view>

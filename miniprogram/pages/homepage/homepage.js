@@ -155,9 +155,6 @@ Page({
   // ------------生命周期函数------------
   onLoad: function (options) {
     var that = this
-    wx.showLoading({
-      title: '北大欢迎你',
-    })
     that.setData({
       isShow: false
     })
@@ -169,7 +166,9 @@ Page({
 
   onShow: function () {
     var that = this
-
+    wx.showLoading({
+      title: '北大欢迎你',
+    })
     app.getInfoByOrder('fruit-board', 'time', 'desc',
       e => {
         getCurrentPages()["0"].setData({
