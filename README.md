@@ -111,6 +111,10 @@ app.js  :
 ### 存储
 ![云存储](https://i.loli.net/2020/10/20/twg8r5DpknGbe4S.jpg)
 
->  fruitSwiper中放首页滚动图片
+>  imgSwiper中放首页滚动图片
+> 
+> fruitSwiper 中存放货物图片
+>
+> activity_images 存放活动相关图片
 
 

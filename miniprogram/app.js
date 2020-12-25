@@ -132,13 +132,7 @@ App({
       return p
     }
     isRepete().then((flag) => {
-      if (flag) {
-        wx.showToast({
-          title: '已经添加过了~',
-        })
-      } else {
-        this.globalData.carts.push(newCartItem)
-      }
+      this.globalData.carts = [newCartItem]
     })
   },
 

@@ -75,10 +75,7 @@ Page({
     var that = this
     var newCartItem = that.data.fruitDetail
     newCartItem.num = that.data.popCartCount
-    // console.log(newCartItem)
-    // app.globalData.carts.push(newCartItem)
     app.isNotRepeteToCart(newCartItem)
-    // console.log(app.globalData.carts) 
     wx.navigateTo({
       url: "../orders/orders?totalPrice=" + that.data.fruitDetail.price,
     })

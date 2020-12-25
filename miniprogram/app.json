@@ -4,7 +4,6 @@
     "pages/homepage/homepage",
     "pages/bgManage/bgManage",
     "pages/bgInfo/bgInfo",
-    "pages/cart/cart",
     "pages/detail/detail",
     "pages/address/address",
     "pages/orders/orders",

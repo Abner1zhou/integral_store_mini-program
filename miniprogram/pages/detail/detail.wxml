@@ -44,11 +44,6 @@
 
   </view>
 
-  
-
-
-  
-
   <!-- 底部导航 -->
   <view class='detail-nav'>
     <view class='buy' bindtap='toBuy'>立即兑换</view>

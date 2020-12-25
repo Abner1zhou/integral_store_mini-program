@@ -7,7 +7,6 @@ Page({
     total: 0,
     orders: [],
     myList: [],
-    openid: '',
     // nonce_str: ''
   },
 
@@ -23,9 +22,6 @@ Page({
     that.setData({
       orders: app.globalData.carts,
       // nonce_str: nonce_str
-    })
-    that.setData({
-      openid: app.globalData.openId
     })
     this.getTotalPrice();
   },
@@ -71,20 +67,17 @@ Page({
       const db = wx.cloud.database();
       var balance = 0;
       db.collection('customer_inf').where({
-          _openid: that.data.openid
+          _openid: app.globalData.openid
         })
         .get()
         .then(res => {
-          console.log(res)
           balance = res.data[0].balance
-        })
-        .then(() => {
           // 余额足够则扣款，并更新数据库
           if (balance >= that.data.total) {
             balance = balance - that.data.total;
             db.collection('customer_inf')
               .where({
-                _openid: that.data.openid
+                _openid: app.globalData.openid
               })
               .update({
                 data: {
