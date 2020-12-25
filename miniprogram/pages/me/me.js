@@ -112,7 +112,7 @@ Page({
         })
         db.collection('order_master')
         .where({
-          _openid: that.data.openid
+          _openid: app.globalData.openid
         }).limit(that.data.goodsLimit)
         .get()
         .then(
@@ -137,7 +137,7 @@ Page({
       name: 'getActivities',
       data: {
         limit: that.data.activitiesLimit,
-        openid: that.data.openid
+        openid: app.globalData.openid
       },
     })
     .then( res => {

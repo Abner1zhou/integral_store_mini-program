@@ -64,72 +64,36 @@ Page({
   toPay() {
     var that = this;
     if (that.data.hasAddress) {
-      const db = wx.cloud.database();
-      var balance = 0;
-      db.collection('customer_inf').where({
-          _openid: app.globalData.openid
+      var tmpList = [];
+      that.data.orders.forEach((val, idx, obj) => {
+        tmpList.push([val.name, val.num, val.price])
+      })
+      wx.cloud.callFunction({
+        name: 'actToPay',
+        data: {
+          tmpList: tmpList,
+          openid: app.globalData.openid,
+          totalPrice: parseInt(that.data.total)
+        }
+      })
+      .then( res => {
+        wx.showToast({
+          title: '兑换成功'
         })
-        .get()
-        .then(res => {
-          balance = res.data[0].balance
-          // 余额足够则扣款，并更新数据库
-          if (balance >= that.data.total) {
-            balance = balance - that.data.total;
-            db.collection('customer_inf')
-              .where({
-                _openid: app.globalData.openid
-              })
-              .update({
-                data: {
-                  balance: balance
-                }
-              })
-            return balance
-          } else {
-            wx.showModal({
-              title: '余额不足',
-              content: '请您多参加活动哦~',
-            })
-            throw Error("余额不足")
-          }
-        })
-        .then(res => {
-          that.data.address.balance = res
-          that.setData({
-            address: that.data.address
+        setTimeout( () => {
+          wx.switchTab({
+            url: '../homepage/homepage',
           })
-          // ------生成订单信息-------
-          let tmp = that.data.address
-          tmp['orderTime'] = app.CurrentTime_show()
-          tmp['orderSuccess'] = true
-          tmp['finished'] = false
-
-          const order_master = tmp;
-          var tmpList = []
-          that.data.orders.forEach((val, idx, obj) => {
-            tmpList.push([val.name, val.num, val.price])
+      }, 1500)
+      })
+      .catch( err => {
+        if ( err.errMsg.includes('余额不足') ) {
+          wx.showToast({
+            icon: 'none',
+            title: '余额不足'
           })
-          order_master['fruitList'] = tmpList
-          order_master['total'] = that.data.total
-
-          app.addRowToSet('order_master', order_master, e => {
-            console.log("订单状态已修改：【订单生成】" + e);
-            wx.showToast({
-              title: '支付成功',
-              duration: 2000,
-            });
-          })
-          wx.setStorage({
-            data: that.data.address,
-            key: 'address',
-          })
-          setTimeout(wx.switchTab({
-            url: '../me/me',
-          }), 2000)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        }
+      })
     } else if (!app.globalData.openid) {
       wx.showModal({
         title: 'Oh No',
